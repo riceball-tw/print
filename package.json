@@ -1,26 +1,33 @@
 {
   "name": "print",
-  "type": "module",
   "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-		"test": "vitest run",
-		"test:watch": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "test:e2e": "pnpm build && playwright test",
-		"typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^7.3.8"
   },
   "devDependencies": {
-		"@types/node": "^22.19.0",
-		"@playwright/test": "^1.64.0",
-		"vitest": "^5.0.4"
-  }
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^22.19.0",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0",
+    "vitest": "^5.0.4"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }
