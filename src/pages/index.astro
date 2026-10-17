@@ -1,5 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
+import AppNavbar from '@/components/AppNavbar.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { postsByCategory } from '@/utils/posts.ts';
 
@@ -14,16 +15,7 @@ const revision = new Date().toISOString().slice(0, 10);
 <BaseLayout title={brand.name} description={brand.description}>
 	<header id="top">
 		<h1>{brand.name} <span class="animate-blink" aria-hidden="true">█</span></h1>
-		<nav class="font-mono text-sm">
-			[{
-				navigation.map((item, index) => (
-					<span>
-						{index > 0 ? ' | ' : ''}
-						<a href={item.url}>{item.name}</a>
-					</span>
-				))
-			}]
-		</nav>
+		<AppNavbar navigation={navigation} />
 		<hr />
 	</header>
 

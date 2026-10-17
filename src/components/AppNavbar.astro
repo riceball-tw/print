@@ -1,0 +1,21 @@
+---
+interface Props {
+	navigation: {
+		name: string;
+		url: string;
+	}[];
+}
+
+const { navigation } = Astro.props;
+---
+
+<nav class="font-mono text-sm">
+	[{
+		navigation.map((item, index) => (
+			<span>
+				{index > 0 ? ' | ' : ''}
+				<a href={item.url}>{item.name}</a>
+			</span>
+		))
+	}]
+</nav>
