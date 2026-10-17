@@ -1,68 +1,11 @@
 ---
-import { getEntry } from 'astro:content';
-import AppNavbar from '@/components/AppNavbar.astro';
-import AutoGrid from '@/components/AutoGrid.astro';
-import PostItem from '@/components/PostItem.astro';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import { postsByCategory } from '@/utils/posts.ts';
-import { hiddenPostCount, previewPosts } from '@/utils/postPreview';
+import { defaultLang } from '@/i18n/ui';
 
-const config = await getEntry('config', 'site');
-if (!config) throw new Error('Missing "site" entry in the config collection.');
-
-const { brand, navigation } = config.data;
-
-const revision = new Date().toISOString().slice(0, 10);
+// The default language is served under `/{lang}/`, so send bare `/` there.
+// A meta refresh works on any static host. See:
+// https://docs.astro.build/en/recipes/i18n/#set-up-pages-for-each-language
+const target = `/${defaultLang}/`;
 ---
 
-<BaseLayout title={brand.name} description={brand.description}>
-	<header id="top">
-		<h1>{brand.name} <span class="animate-blink" aria-hidden="true">█</span></h1>
-		<AppNavbar navigation={navigation} />
-		<hr />
-	</header>
-
-	<main class="mx-auto px-3">
-		<section>
-			<h2 class="sr-only">Posts by category</h2>
-			<AutoGrid minCardWidth={600}>
-				{
-					postsByCategory.map(({ category, posts }) => {
-						const hidden = hiddenPostCount(posts.length);
-						return (
-							<section>
-								<h3>
-									{category} <span class="font-mono text-xs">({posts.length})</span>
-								</h3>
-								<ul class="list-none" role="list">
-									{previewPosts(posts).map((post) => <PostItem post={post} />)}
-									{hidden > 0 && (
-										<li>
-											<a href="/posts/">… {hidden} more</a>
-										</li>
-									)}
-								</ul>
-							</section>
-						);
-					})
-				}
-			</AutoGrid>
-		</section>
-	</main>
-
-	<footer class="mx-auto px-3 pb-10">
-		<hr />
-		<p class="font-mono text-xs">
-			{brand.copyright} · links:
-			{
-				brand.socials.map((social, index) => (
-					<span>
-						{index > 0 ? ' / ' : ''}
-						<a href={social.url}>{social.name}</a>
-					</span>
-				))
-			}
-		</p>
-		<p class="font-mono text-xs"><a href="#top">[ top ]</a></p>
-	</footer>
-</BaseLayout>
+<meta http-equiv="refresh" content={`0;url=${target}`} />
+<p><a href={target}>Redirecting to the {defaultLang} site…</a></p>
