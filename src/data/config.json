@@ -17,15 +17,15 @@
     },
     "navigation": [
       {
-        "name": "Home",
+        "translationKey": "nav.home",
         "url": "/"
       },
       {
-        "name": "Posts",
+        "translationKey": "nav.posts",
         "url": "/posts"
       },
       {
-        "name": "About",
+        "translationKey": "nav.about",
         "url": "/about"
       }
     ]

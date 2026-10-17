@@ -19,8 +19,11 @@ const postSchema = z.object({
   lastModifiedDate: z.date().optional(),
 });
 
+// Navigation labels are translated: `translationKey` looks up the label in
+// src/i18n/ui.ts, and `url` is a language-relative path (the language prefix
+// is added when rendering).
 const navigationItemSchema = z.object({
-  name: z.string(),
+  translationKey: z.string(),
   url: z.string(),
 });
 
