@@ -2,15 +2,14 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { dateSortedPublishedPosts } from '@/utils/posts.ts';
 
-const isProduction = import.meta.env.MODE === 'production';
 const posts = dateSortedPublishedPosts;
 ---
 
 <BaseLayout title="Posts" description="Every post, newest first.">
-	<main class="mx-auto max-w-[880px] px-3 py-4">
+	<main class="mx-auto">
 		<h1>Posts</h1>
 		<p class="font-mono text-xs">
-			{posts.length} entries · {isProduction ? 'published only' : 'drafts visible'}
+			{posts.length} entries
 		</p>
 		<hr />
 		<ul>
