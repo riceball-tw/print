@@ -7,9 +7,9 @@ type Post = {
   data: { headline: string; publishDate: Date };
 };
 
-const renderPostItem = async (post: Post) => {
+const renderPostItem = async (post: Post, lang = "en") => {
   const container = await AstroContainer.create();
-  return container.renderToString(PostItem, { props: { post } });
+  return container.renderToString(PostItem, { props: { post, lang } });
 };
 
 const post: Post = {
@@ -34,8 +34,24 @@ describe("PostItem", () => {
   it("links the headline to its post, ahead of the publish date", async () => {
     const html = await renderPostItem(post);
 
-    expect(html).toMatch(/<a[^>]*href="\/posts\/alpha\/"[^>]*>Alpha<\/a>/);
+    expect(html).toMatch(/<a[^>]*href="\/en\/posts\/alpha\/"[^>]*>Alpha<\/a>/);
     expect(html).toContain("2024-01-02");
     expect(html.indexOf("Alpha")).toBeLessThan(html.indexOf("2024-01-02"));
+  });
+
+  it("prefixes the post link with the given language", async () => {
+    const html = await renderPostItem(post, "zh-tw");
+
+    expect(html).toMatch(/<a[^>]*href="\/zh-tw\/posts\/alpha\/"[^>]*>Alpha<\/a>/);
+  });
+
+  it("does not repeat the language when the post id is language-scoped", async () => {
+    const html = await renderPostItem(
+      { ...post, id: "zh-tw/alpha" },
+      "zh-tw",
+    );
+
+    expect(html).toMatch(/<a[^>]*href="\/zh-tw\/posts\/alpha\/"[^>]*>Alpha<\/a>/);
+    expect(html).not.toContain("/zh-tw/posts/zh-tw/");
   });
 });

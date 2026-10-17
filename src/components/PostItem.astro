@@ -1,4 +1,5 @@
 ---
+import { getSlugFromId } from '@/i18n/utils';
 import { formatDate } from '@/utils/date';
 
 interface Props {
@@ -9,13 +10,15 @@ interface Props {
 			publishDate: Date;
 		};
 	};
+	/** Language prefix for the link, so posts live under `/{lang}/posts/`. */
+	lang?: string;
 }
 
-const { post } = Astro.props;
+const { post, lang = 'en' } = Astro.props;
 ---
 
 <li class="flex items-baseline gap-2">
-	<a class="min-w-0 truncate" href={`/posts/${post.id}/`}>
+	<a class="min-w-0 truncate" href={`/${lang}/posts/${getSlugFromId(post.id)}/`}>
 		{post.data.headline}
 	</a>
 	<span class="flex-1 border-b border-current" aria-hidden="true" />
