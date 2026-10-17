@@ -24,8 +24,14 @@ const navigationItemSchema = z.object({
   url: z.string(),
 });
 
+// Site-wide configuration in src/data/config.json.
+//
+// The `file()` loader treats each top-level key as a collection entry `id`.
+// Keeping a single `site` key makes this collection a singleton:
+//
+//   const config = await getEntry('config', 'site');
 const config = defineCollection({
-  loader: file("src/data/config.yml"),
+  loader: file("src/data/config.json"),
   schema: z.object({
     brand: z.object({
       name: z.string(),

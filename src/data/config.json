@@ -1,0 +1,33 @@
+{
+  "site": {
+    "brand": {
+      "name": "Print",
+      "description": "A minimal Astro site.",
+      "copyright": "© 2026 Print",
+      "socials": [
+        {
+          "name": "GitHub",
+          "url": "https://github.com/withastro"
+        },
+        {
+          "name": "X",
+          "url": "https://x.com/astrodotbuild"
+        }
+      ]
+    },
+    "navigation": [
+      {
+        "name": "Home",
+        "url": "/"
+      },
+      {
+        "name": "Posts",
+        "url": "/posts"
+      },
+      {
+        "name": "About",
+        "url": "/about"
+      }
+    ]
+  }
+}
