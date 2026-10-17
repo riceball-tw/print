@@ -1,8 +1,10 @@
 ---
 import { getEntry } from 'astro:content';
 import AppNavbar from '@/components/AppNavbar.astro';
+import PostItem from '@/components/PostItem.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { postsByCategory } from '@/utils/posts.ts';
+import { hiddenPostCount, previewPosts } from '@/utils/postPreview';
 
 const config = await getEntry('config', 'site');
 if (!config) throw new Error('Missing "site" entry in the config collection.');
@@ -23,28 +25,24 @@ const revision = new Date().toISOString().slice(0, 10);
 		<section>
 			<h2 class="sr-only">Posts by category</h2>
 			{
-				postsByCategory.map(({ category, posts }) => (
-					<>
-						<h3>
-							{category} <span class="font-mono text-xs">({posts.length})</span>
-						</h3>
-						<ul>
-							{posts.slice(0, 3).map((post) => (
-								<li>
-									<span class="font-mono text-xs">
-										{post.data.publishDate.toISOString().slice(0, 10)}
-									</span>{' '}
-									<a href={`/posts/${post.id}/`}>{post.data.headline}</a>
-								</li>
-							))}
-							{posts.length > 3 && (
-								<li>
-									<a href="/posts/">… {posts.length - 3} more</a>
-								</li>
-							)}
-						</ul>
-					</>
-				))
+				postsByCategory.map(({ category, posts }) => {
+					const hidden = hiddenPostCount(posts.length);
+					return (
+						<>
+							<h3>
+								{category} <span class="font-mono text-xs">({posts.length})</span>
+							</h3>
+							<ul class="list-none" role="list">
+								{previewPosts(posts).map((post) => <PostItem post={post} />)}
+								{hidden > 0 && (
+									<li>
+										<a href="/posts/">… {hidden} more</a>
+									</li>
+								)}
+							</ul>
+						</>
+					);
+				})
 			}
 		</section>
 	</main>

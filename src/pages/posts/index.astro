@@ -1,4 +1,5 @@
 ---
+import PostItem from '@/components/PostItem.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { dateSortedPublishedPosts } from '@/utils/posts.ts';
 
@@ -12,16 +13,8 @@ const posts = dateSortedPublishedPosts;
 			{posts.length} entries
 		</p>
 		<hr />
-		<ul>
-			{
-				posts.map((post) => (
-					<li>
-						<a href={`/posts/${post.id}/`}>{post.data.headline}</a>
-						{' — '}
-						<span class="font-mono text-xs">{post.data.publishDate.toISOString().slice(0, 10)}</span>
-					</li>
-				))
-			}
+		<ul class="list-none" role="list">
+			{posts.map((post) => <PostItem post={post} />)}
 		</ul>
 		<hr />
 		<p class="font-mono text-xs"><a href="/">[ back ]</a></p>

@@ -1,0 +1,23 @@
+---
+import { formatDate } from '@/utils/date';
+
+interface Props {
+	post: {
+		id: string;
+		data: {
+			headline: string;
+			publishDate: Date;
+		};
+	};
+}
+
+const { post } = Astro.props;
+---
+
+<li class="flex items-baseline gap-2">
+	<a class="min-w-0 truncate" href={`/posts/${post.id}/`}>
+		{post.data.headline}
+	</a>
+	<span class="flex-1 border-b border-current" aria-hidden="true" />
+	<span class="shrink-0 font-mono text-xs">{formatDate(post.data.publishDate)}</span>
+</li>
