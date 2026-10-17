@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { dateSortedPublishedPosts } from '@/utils/posts.ts';
+
+const isProduction = import.meta.env.MODE === 'production';
+const posts = dateSortedPublishedPosts;
+---
+
+<BaseLayout title="Posts" description="Every post, newest first.">
+	<main class="mx-auto max-w-[880px] px-3 py-4">
+		<h1>Posts</h1>
+		<p class="font-mono text-xs">
+			{posts.length} entries · {isProduction ? 'published only' : 'drafts visible'}
+		</p>
+		<hr />
+		<ul>
+			{
+				posts.map((post) => (
+					<li>
+						<a href={`/posts/${post.id}/`}>{post.data.headline}</a>
+						{' — '}
+						<span class="font-mono text-xs">{post.data.publishDate.toISOString().slice(0, 10)}</span>
+					</li>
+				))
+			}
+		</ul>
+		<hr />
+		<p class="font-mono text-xs"><a href="/">[ back ]</a></p>
+	</main>
+</BaseLayout>
