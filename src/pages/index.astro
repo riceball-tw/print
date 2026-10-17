@@ -1,10 +1,155 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { postsByCategory } from '@/utils/posts.ts';
+
+const config = await getEntry('config', 'site');
+if (!config) throw new Error('Missing "site" entry in the config collection.');
+
+const { brand, navigation } = config.data;
+
+const revision = new Date().toISOString().slice(0, 10);
+
+const principles = [
+	{ title: 'Structure over style', body: 'default type, visible borders, one column, all the way down.' },
+	{ title: 'Nothing hidden', body: 'the markup is the design. no overlays, no tricks, no polish.' },
+	{ title: 'Default colors', body: 'black on white, and links that stay blue.' },
+	{ title: 'No decoration', body: 'no shadows, no gradients, no rounded corners.' },
+];
+
+const specs = [
+	['engine', 'astro'],
+	['styles', 'tailwind (barely)'],
+	['typefaces', 'times new roman / courier new'],
+	['border radius', '0px'],
+	['box shadow', 'none'],
+	['javascript', 'optional'],
+];
+
+const source = `<!doctype html>
+<html lang="en">
+  <head>
+    <title>${brand.name}</title>
+  </head>
+  <body>
+    <!-- no polish. ship it. -->
+  </body>
+</html>`;
 ---
 
-<BaseLayout title="Print">
-	<main>
-		<h1>Print</h1>
-		<p>A minimal Astro site.</p>
+<BaseLayout title={brand.name} description={brand.description}>
+	<header id="top" class="mx-auto max-w-[880px] px-3 pt-2">
+		<h1>{brand.name}</h1>
+		<p class="font-mono text-xs">
+			{revision} · status: <span class="animate-blink" aria-hidden="true">█</span> online
+		</p>
+		<nav class="font-mono text-sm">
+			[{
+				navigation.map((item, index) => (
+					<span>
+						{index > 0 ? ' | ' : ''}
+						<a href={item.url}>{item.name}</a>
+					</span>
+				))
+			}]
+		</nav>
+		<hr />
+	</header>
+
+	<main class="mx-auto max-w-[880px] px-3">
+		<section>
+			<h2>What this is</h2>
+			<p>{brand.description}</p>
+			<p>
+				No design system, no component library, no hero. Just HTML, a stylesheet, and a
+				willingness to leave things unpolished. Structure does the talking.
+			</p>
+		</section>
+
+		<hr />
+
+		<section>
+			<h2>Posts by category</h2>
+			{
+				postsByCategory.map(({ category, posts }) => (
+					<>
+						<h3>
+							{category} <span class="font-mono text-xs">({posts.length})</span>
+						</h3>
+						<ul>
+							{posts.slice(0, 3).map((post) => (
+								<li>
+									<span class="font-mono text-xs">
+										{post.data.publishDate.toISOString().slice(0, 10)}
+									</span>{' '}
+									<a href={`/posts/${post.id}/`}>{post.data.headline}</a>
+								</li>
+							))}
+							{posts.length > 3 && (
+								<li>
+									<a href="/posts/">… {posts.length - 3} more</a>
+								</li>
+							)}
+						</ul>
+					</>
+				))
+			}
+		</section>
+
+		<hr />
+
+		<section>
+			<h2>Principles</h2>
+			<ol>
+				{
+					principles.map((principle) => (
+						<li>
+							<b>{principle.title}</b> — {principle.body}
+						</li>
+					))
+				}
+			</ol>
+		</section>
+
+		<hr />
+
+		<section>
+			<h2>Specs</h2>
+			<table>
+				<tbody>
+					{
+						specs.map(([key, value]) => (
+							<tr>
+								<th scope="row">{key}</th>
+								<td>{value}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+		</section>
+
+		<hr />
+
+		<section>
+			<h2>View source</h2>
+			<pre class="overflow-x-auto text-sm">{source}</pre>
+		</section>
 	</main>
+
+	<footer class="mx-auto max-w-[880px] px-3 pb-10">
+		<hr />
+		<p class="font-mono text-xs">
+			{brand.copyright} · links:
+			{
+				brand.socials.map((social, index) => (
+					<span>
+						{index > 0 ? ' / ' : ''}
+						<a href={social.url}>{social.name}</a>
+					</span>
+				))
+			}
+		</p>
+		<p class="font-mono text-xs"><a href="#top">[ top ]</a></p>
+	</footer>
 </BaseLayout>
