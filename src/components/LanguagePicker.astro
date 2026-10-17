@@ -1,0 +1,31 @@
+---
+import { languages, type LanguageKey } from '@/i18n/ui';
+import { useTranslatedPath } from '@/i18n/utils';
+
+interface Props {
+	/** The language the current page is rendered in. */
+	lang: LanguageKey;
+	/** The current page path without its language prefix, e.g. `/posts`. */
+	path: string;
+	/** Accessible label for the language navigation landmark. */
+	label: string;
+}
+
+const { lang, path, label } = Astro.props;
+const translatePath = useTranslatedPath(lang);
+---
+
+<nav class="font-mono text-xs" aria-label={label}>
+	[{
+		Object.entries(languages).map(([key, name], index) => (
+			<span>
+				{index > 0 ? ' | ' : ''}
+				{key === lang ? (
+					<span aria-current="true">{name}</span>
+				) : (
+					<a href={translatePath(path, key as LanguageKey)}>{name}</a>
+				)}
+			</span>
+		))
+	}]
+</nav>

@@ -1,17 +1,23 @@
 ---
 import '@/styles/global.css';
+import LanguagePicker from '@/components/LanguagePicker.astro';
+import { languageTags } from '@/i18n/ui';
+import { getLangFromUrl, getPathFromUrl, useTranslations } from '@/i18n/utils';
 
 interface Props {
 	title: string;
 	description?: string;
-	lang?: string;
 }
 
-const { title, description = 'A minimal Astro site.', lang = 'en' } = Astro.props;
+const { title, description = 'A minimal Astro site.' } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const path = getPathFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={languageTags[lang]}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -24,5 +30,8 @@ const { title, description = 'A minimal Astro site.', lang = 'en' } = Astro.prop
 	</head>
 	<body>
 		<slot />
+		<div class="mx-auto px-3 pt-2 pb-10">
+			<LanguagePicker lang={lang} path={path} label={t('language.select')} />
+		</div>
 	</body>
 </html>
