@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import AppNavbar from '@/components/AppNavbar.astro';
+import AutoGrid from '@/components/AutoGrid.astro';
 import PostItem from '@/components/PostItem.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { postsByCategory } from '@/utils/posts.ts';
@@ -24,26 +25,28 @@ const revision = new Date().toISOString().slice(0, 10);
 	<main class="mx-auto px-3">
 		<section>
 			<h2 class="sr-only">Posts by category</h2>
-			{
-				postsByCategory.map(({ category, posts }) => {
-					const hidden = hiddenPostCount(posts.length);
-					return (
-						<>
-							<h3>
-								{category} <span class="font-mono text-xs">({posts.length})</span>
-							</h3>
-							<ul class="list-none" role="list">
-								{previewPosts(posts).map((post) => <PostItem post={post} />)}
-								{hidden > 0 && (
-									<li>
-										<a href="/posts/">… {hidden} more</a>
-									</li>
-								)}
-							</ul>
-						</>
-					);
-				})
-			}
+			<AutoGrid minCardWidth={600}>
+				{
+					postsByCategory.map(({ category, posts }) => {
+						const hidden = hiddenPostCount(posts.length);
+						return (
+							<section>
+								<h3>
+									{category} <span class="font-mono text-xs">({posts.length})</span>
+								</h3>
+								<ul class="list-none" role="list">
+									{previewPosts(posts).map((post) => <PostItem post={post} />)}
+									{hidden > 0 && (
+										<li>
+											<a href="/posts/">… {hidden} more</a>
+										</li>
+									)}
+								</ul>
+							</section>
+						);
+					})
+				}
+			</AutoGrid>
 		</section>
 	</main>
 
