@@ -11,7 +11,7 @@ const headingPositions = (page: Page) =>
   );
 
 test("home page renders through the base layout", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/en/");
 
   await expect(page).toHaveTitle("Print");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
@@ -23,12 +23,14 @@ test("home page renders through the base layout", async ({ page }) => {
     "content",
     "A minimal Astro site.",
   );
-  await expect(page.getByRole("main")).toContainText("A minimal Astro site.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Print");
 });
 
 test("category lists expand into several columns on a wide screen", async ({ page }) => {
-  await page.setViewportSize({ width: 1200, height: 900 });
-  await page.goto("/");
+  // Two 600px columns plus the 32px gap and page padding need ~1256px, so use a
+  // viewport comfortably wider than that.
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto("/en/");
 
   const positions = await headingPositions(page);
   expect(positions.length).toBeGreaterThan(1);
@@ -41,7 +43,7 @@ test("category lists expand into several columns on a wide screen", async ({ pag
 
 test("category lists stack into a single column on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/");
+  await page.goto("/en/");
 
   const positions = await headingPositions(page);
   expect(new Set(positions.map((position) => position.x)).size).toBe(1);
