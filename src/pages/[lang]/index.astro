@@ -7,6 +7,7 @@ import { getLangFromUrl, useTranslatedPath, useTranslations } from '@/i18n/utils
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { hiddenPostCount, previewPosts } from '@/utils/postPreview';
 import { postsByCategoryForLang } from '@/utils/posts.ts';
+import { slugify } from '@/utils/slug';
 
 export function getStaticPaths() {
 	return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -37,7 +38,12 @@ const revision = new Date().toISOString().slice(0, 10);
 						return (
 							<section>
 								<h3 class="flex items-baseline justify-between gap-3 border-b border-line pb-2 text-lg">
-									<span class="uppercase tracking-wide">{category}</span>
+									<a
+										class="uppercase tracking-wide"
+										href={`${translatePath(`/categories/${slugify(category)}`)}/`}
+									>
+										{category}
+									</a>
 									<span class="font-mono text-xs font-normal tracking-widest text-muted">{posts.length}</span>
 								</h3>
 								<ul class="mt-3 list-none space-y-2" role="list">
