@@ -18,15 +18,26 @@ const translatePath = useTranslatedPath("en");
 test("navbar renders the translated navigation defined in the site config", async ({ page }) => {
   await page.goto("/en/");
 
-  const navbar = page.locator("header").getByRole("navigation");
-  await expect(navbar).toBeVisible();
+  const nav = page.getByTestId("navbar").getByRole("navigation");
+  await expect(nav).toBeVisible();
 
-  const links = navbar.getByRole("link");
+  const links = nav.getByRole("link");
   await expect(links).toHaveCount(navigation.length);
 
   for (const [index, item] of navigation.entries()) {
     const link = links.nth(index);
     await expect(link).toHaveText(t(item.translationKey as TranslationKey));
     await expect(link).toHaveAttribute("href", translatePath(item.url));
+  }
+});
+
+test("every page shows the navbar with the site logo linking home", async ({ page }) => {
+  for (const path of ["/en/", "/en/posts/"]) {
+    await page.goto(path);
+
+    const navbar = page.getByTestId("navbar");
+    await expect(navbar).toBeVisible();
+    await expect(navbar.getByRole("link", { name: /Print/ })).toHaveAttribute("href", "/en/");
+    await expect(navbar.getByRole("navigation")).toBeVisible();
   }
 });

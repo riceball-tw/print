@@ -1,8 +1,11 @@
 ---
 import '@/styles/global.css';
+import { getEntry } from 'astro:content';
+import AppNavbar from '@/components/AppNavbar.astro';
 import LanguagePicker from '@/components/LanguagePicker.astro';
 import { languageTags } from '@/i18n/ui';
-import { getLangFromUrl, getPathFromUrl, useTranslations } from '@/i18n/utils';
+import { getLangFromUrl, getPathFromUrl, useTranslatedPath, useTranslations } from '@/i18n/utils';
+import { buildNav } from '@/utils/nav';
 
 interface Props {
 	title: string;
@@ -14,6 +17,14 @@ const { title, description = 'A minimal Astro site.' } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const path = getPathFromUrl(Astro.url);
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const config = await getEntry('config', 'site');
+if (!config) throw new Error('Missing "site" entry in the config collection.');
+
+const { brand, navigation } = config.data;
+const nav = buildNav(navigation, t, translatePath);
+const homeUrl = translatePath('/');
 ---
 
 <!doctype html>
@@ -29,9 +40,19 @@ const t = useTranslations(lang);
 		<slot name="head" />
 	</head>
 	<body>
-		<slot />
-		<div class="mx-auto px-3 pt-2 pb-10">
-			<LanguagePicker lang={lang} path={path} label={t('language.select')} />
+		<header
+			id="top"
+			data-test="navbar"
+			class="fixed left-0 top-0 flex h-(--navbar-height) w-full items-center justify-between md:h-full md:w-(--navbar-width) md:flex-col md:items-start md:justify-start"
+		>
+			<a class="text-xl font-bold" href={homeUrl}>{brand.name} <span class="animate-blink" aria-hidden="true">█</span></a>
+			<AppNavbar navigation={nav} />
+		</header>
+		<div class="mt-(--navbar-height) md:mt-0 md:ml-(--navbar-width)">
+			<slot />
+			<div class="mx-auto px-3 pt-2 pb-10">
+				<LanguagePicker lang={lang} path={path} label={t('language.select')} />
+			</div>
 		</div>
 	</body>
 </html>

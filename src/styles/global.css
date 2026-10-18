@@ -10,6 +10,12 @@
   --font-serif: "Times New Roman", Times, serif;
   --font-mono: "Courier New", Courier, monospace;
 
+  /* Width of the fixed side navbar on large screens, and the space reserved beside it. */
+  --navbar-width: 7rem;
+
+  /* Height of the fixed top navbar on small screens, and the space reserved below it. */
+  --navbar-height: 3.5rem;
+
   --animate-blink: blink 1.1s steps(1, end) infinite;
 }
 
@@ -31,7 +37,7 @@
   }
 
   html {
-    font-family: var(--font-serif);
+    /* font-family: var(--font-serif); */
     line-height: 1.35;
     -webkit-text-size-adjust: 100%;
   }

@@ -9,13 +9,6 @@ interface Props {
 const { navigation } = Astro.props;
 ---
 
-<nav class="font-mono text-sm">
-	[{
-		navigation.map((item, index) => (
-			<span>
-				{index > 0 ? ' | ' : ''}
-				<a href={item.url}>{item.name}</a>
-			</span>
-		))
-	}]
+<nav class="flex gap-x-3 font-mono text-sm md:flex-col">
+	{navigation.map((item) => <a href={item.url}>{item.name}</a>)}
 </nav>
