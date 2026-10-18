@@ -26,7 +26,7 @@ const revision = new Date().toISOString().slice(0, 10);
 ---
 
 <BaseLayout title={brand.name} description={brand.description}>
-	<main class="mx-auto px-3">
+	<main class="px-4 pt-6 pb-12">
 		<h1 class="sr-only">{brand.name}</h1>
 		<section>
 			<h2 class="sr-only">{t('home.postsByCategory')}</h2>
@@ -36,14 +36,17 @@ const revision = new Date().toISOString().slice(0, 10);
 						const hidden = hiddenPostCount(posts.length);
 						return (
 							<section>
-								<h3>
-									{category} <span class="font-mono text-xs">({posts.length})</span>
+								<h3 class="flex items-baseline justify-between gap-3 border-b border-line pb-2 text-lg">
+									<span class="uppercase tracking-wide">{category}</span>
+									<span class="font-mono text-xs font-normal tracking-widest text-muted">{posts.length}</span>
 								</h3>
-								<ul class="list-none" role="list">
+								<ul class="mt-3 list-none space-y-2" role="list">
 									{previewPosts(posts).map((post) => <PostItem post={post} lang={lang} />)}
 									{hidden > 0 && (
 										<li>
-											<a href={`${translatePath('/posts')}/`}>{t('home.more', { count: hidden })}</a>
+											<a class="label" href={`${translatePath('/posts')}/`}>
+												{t('home.more', { count: hidden })}
+											</a>
 										</li>
 									)}
 								</ul>
@@ -55,19 +58,20 @@ const revision = new Date().toISOString().slice(0, 10);
 		</section>
 	</main>
 
-	<footer class="mx-auto px-3 pb-10">
+	<footer class="px-4 pb-12">
 		<hr />
-		<p class="font-mono text-xs">
-			{brand.copyright} · {t('footer.links')}
+		<p class="mt-3 flex flex-wrap gap-x-2 font-mono text-xs tracking-widest uppercase text-muted">
+			<span>{brand.copyright}</span>
+			<span>·</span>
+			<span>{t('footer.links')}</span>
 			{
-				brand.socials.map((social, index) => (
-					<span>
-						{index > 0 ? ' / ' : ''}
-						<a href={social.url}>{social.name}</a>
-					</span>
+				brand.socials.map((social) => (
+					<a class="text-ink transition-colors hover:text-accent" href={social.url}>
+						{social.name}
+					</a>
 				))
 			}
 		</p>
-		<p class="font-mono text-xs"><a href="#top">{t('common.top')}</a></p>
+		<p class="mt-2 font-mono text-xs"><a href="#top">{t('common.top')}</a></p>
 	</footer>
 </BaseLayout>

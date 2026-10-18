@@ -7,8 +7,24 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @theme {
-  --font-serif: "Times New Roman", Times, serif;
-  --font-mono: "Courier New", Courier, monospace;
+  /*
+   * A grotesque sans stack for body copy, and a monospace stack for the small
+   * labels that give the layout its printed-technical feel.
+   */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /*
+   * Two-tone, high-contrast palette on warm paper, with a single vermilion
+   * accent reserved for the cursor, focus rings and link underlines.
+   */
+  --color-paper: #f7f6f2;
+  --color-ink: #0b0b0b;
+  --color-muted: #6f6b63;
+  --color-accent: #ff3b00;
+  /* Hairline dividers: present, but quiet. */
+  --color-line: color-mix(in srgb, var(--color-ink) 14%, transparent);
 
   /* Width of the fixed side navbar on large screens, and the space reserved beside it. */
   --navbar-width: 7rem;
@@ -37,28 +53,224 @@
   }
 
   html {
-    /* font-family: var(--font-serif); */
-    line-height: 1.35;
+    font-family: var(--font-sans);
+    line-height: 1.5;
     -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    scroll-behavior: smooth;
+    /* Keep anchor jumps clear of the fixed navbar. */
+    scroll-padding-top: calc(var(--navbar-height) + 1rem);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  /* Everything the browser would otherwise space on its own, tamed. */
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  figure,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 3px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 
   hr {
     border: 0;
-    border-top: 1px solid currentColor;
+    border-top: 1px solid var(--color-line);
   }
 
   table {
     border-collapse: collapse;
+    width: 100%;
   }
   th,
   td {
     border: 1px solid currentColor;
-    padding: 2px 8px;
+    padding: 4px 8px;
     text-align: left;
+  }
+  th {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
 
   ::selection {
-    background: #000000;
-    color: #ffffff;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Small monospace label used for metadata above a title, counts and so on.
+   */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /*
+   * Rendered post body. Keeps the generous measure and rhythm of a printed
+   * column while the rest of the site stays terse.
+   */
+  .prose {
+    max-width: 68ch;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+
+  .prose > * + * {
+    margin-top: 1.25em;
+  }
+
+  .prose h2 {
+    margin-top: 2em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--color-line);
+    font-size: 1.5rem;
+  }
+
+  .prose h3 {
+    margin-top: 1.75em;
+    font-size: 1.15rem;
+  }
+
+  .prose h2 + *,
+  .prose h3 + * {
+    margin-top: 0.75em;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+    list-style: revert;
+  }
+
+  .prose li + li {
+    margin-top: 0.35em;
+  }
+
+  .prose a {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .prose a:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    text-decoration-color: var(--color-paper);
+  }
+
+  .prose blockquote {
+    padding-left: 1em;
+    border-left: 2px solid var(--color-line);
+    color: var(--color-muted);
+  }
+
+  .prose code {
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  .prose pre {
+    padding: 1em;
+    border: 1px solid var(--color-line);
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .prose pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: inherit;
+  }
+
+  .prose img {
+    border: 1px solid var(--color-line);
+  }
+
+  .prose hr {
+    margin: 2.5em 0;
   }
 }

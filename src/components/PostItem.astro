@@ -17,10 +17,10 @@ interface Props {
 const { post, lang = 'en' } = Astro.props;
 ---
 
-<li class="flex items-baseline gap-2">
+<li class="flex items-baseline gap-3 leading-snug">
 	<a class="min-w-0 truncate" href={`/${lang}/posts/${getSlugFromId(post.id)}/`}>
 		{post.data.headline}
 	</a>
-	<span class="flex-1 border-b border-current" aria-hidden="true" />
-	<span class="shrink-0 font-mono text-xs">{formatDate(post.data.publishDate)}</span>
+	<span class="flex-1 border-b border-dotted border-ink/25" aria-hidden="true" />
+	<span class="shrink-0 font-mono text-xs text-muted">{formatDate(post.data.publishDate)}</span>
 </li>

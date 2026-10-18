@@ -15,7 +15,7 @@ const { lang, path, label } = Astro.props;
 const translatePath = useTranslatedPath(lang);
 ---
 
-<nav class="font-mono text-xs" aria-label={label}>
+<nav class="label" aria-label={label}>
 	[{
 		Object.entries(languages).map(([key, name], index) => (
 			<span>
