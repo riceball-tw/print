@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  # !IMPORTANT: Every branch for now, so the deploy can be exercised before it
+  # lands on the default branch. Narrow this back to `branches: [main]` when
+  # the pipeline is trusted.
+  push:
+  workflow_dispatch:
+
+# Read the repo; the deploy job additionally gets `pages: write` + `id-token: write`.
+permissions:
+  contents: read
+
+# One Pages deployment at a time. Queued runs wait for the live one instead of
+# cancelling it mid-flight.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10.33.0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Checks are deliberately run without `PUBLIC_BASE_URL`: the unit tests
+      # pin root-relative links and stub the base themselves. Only the build
+      # below needs the real deployment sub-path.
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      - name: Build
+        run: pnpm build
+        env:
+          # A repository variable named PUBLIC_BASE_URL holds the deployment
+          # sub-path. A project site on GitHub Pages is served from
+          # `https://<owner>.github.io/<repo>/`, so that is the repo name.
+          # Leave it empty (or use a full URL such as a custom domain) for a
+          # site served from the domain root. See src/utils/base.ts.
+          PUBLIC_BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
+
+      # GitHub Pages serves exactly this artifact at the deployment base.
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy-github-pages:
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
