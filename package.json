@@ -9,7 +9,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "pnpm build && playwright test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "astro check",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "fmt": "oxfmt",
@@ -21,12 +21,14 @@
     "astro": "^7.3.8"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.64.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.19.0",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
     "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
     "vitest": "^5.0.4"
   },
   "engines": {
