@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { languages } from "../src/i18n/ui";
+import { languageShortNames, languages } from "../src/i18n/ui";
 
 test("the root path redirects to the default language", async ({ page }) => {
   await page.goto("/");
@@ -40,7 +40,38 @@ test("the language picker lists every language and marks the current one", async
     await expect(picker.getByText(name, { exact: true })).toBeVisible();
   }
 
-  await expect(picker.locator('[aria-current="true"]')).toHaveText("繁體中文");
+  // Holds both the compact and the full label, hence "contain".
+  await expect(picker.locator('[aria-current="true"]')).toContainText("繁體中文");
+});
+
+test("the language picker lives in the sidebar", async ({ page }) => {
+  for (const path of ["/en/", "/en/posts/"]) {
+    await page.goto(path);
+
+    const sidebar = page.getByTestId("sidebar");
+    await expect(sidebar.getByRole("navigation", { name: "Please select language" })).toBeVisible();
+    await expect(sidebar).toBeVisible();
+  }
+});
+
+test("the language picker stays compact in the top bar on a narrow screen", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto("/zh-tw/");
+
+  const picker = page.getByTestId("sidebar").getByRole("navigation", { name: "請選擇語言" });
+  await expect(picker).toBeVisible();
+
+  // The full names do not fit beside the navigation, so the picker falls back
+  // to the compact labels.
+  for (const short of Object.values(languageShortNames)) {
+    await expect(picker.getByText(short, { exact: true })).toBeVisible();
+  }
+  await expect(picker.getByText("繁體中文", { exact: true })).toBeHidden();
+
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBe(0);
 });
 
 test("switching language keeps the visitor on the same page", async ({ page }) => {

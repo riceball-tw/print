@@ -23,6 +23,15 @@ export const languageTags = {
   "zh-tw": "zh-Hant-TW",
 } as const;
 
+// Compact labels the language picker shows in the narrow top bar, where the
+// full names would crowd out the navigation. Keyed like `languages`, so every
+// language has to provide one, and kept shorter than the full name.
+export const languageShortNames = {
+  en: "EN",
+  "zh-cn": "简",
+  "zh-tw": "繁",
+} as const satisfies Record<keyof typeof languages, string>;
+
 const en = {
   "nav.home": "Home",
   "nav.posts": "Posts",
@@ -35,7 +44,7 @@ const en = {
   "posts.all": "[ all posts ]",
   "common.back": "[ back ]",
   "common.top": "[ top ]",
-  "footer.links": "links:",
+  "footer.links": "connect:",
   "language.select": "Please select language",
 } as const;
 
@@ -53,7 +62,7 @@ const zhCn = {
   "posts.all": "[ 所有文章 ]",
   "common.back": "[ 返回 ]",
   "common.top": "[ 顶部 ]",
-  "footer.links": "链接：",
+  "footer.links": "联系：",
   "language.select": "请选择语言",
 } satisfies Record<keyof typeof en, string>;
 
@@ -69,7 +78,7 @@ const zhTw = {
   "posts.all": "[ 所有文章 ]",
   "common.back": "[ 返回 ]",
   "common.top": "[ 頂端 ]",
-  "footer.links": "連結：",
+  "footer.links": "聯繫：",
   "language.select": "請選擇語言",
 } satisfies Record<keyof typeof en, string>;
 

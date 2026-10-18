@@ -1,5 +1,5 @@
 ---
-import { languages, type LanguageKey } from '@/i18n/ui';
+import { languages, languageShortNames, type LanguageKey } from '@/i18n/ui';
 import { useTranslatedPath } from '@/i18n/utils';
 
 interface Props {
@@ -15,17 +15,31 @@ const { lang, path, label } = Astro.props;
 const translatePath = useTranslatedPath(lang);
 ---
 
-<nav class="label" aria-label={label}>
-	[{
+{/*
+	One list, two shapes: a compact inline run of short names in the small-screen
+	top bar, and a vertical list of full names at the bottom of the sidebar. The
+	short label is hidden from `md` up, and vice versa.
+*/}
+<nav
+	class="label flex flex-wrap items-center gap-x-1 gap-y-1 md:flex-col md:items-start md:gap-y-2"
+	aria-label={label}
+>
+	{
 		Object.entries(languages).map(([key, name], index) => (
-			<span>
-				{index > 0 ? ' | ' : ''}
+			<>
+				{index > 0 && <span aria-hidden="true" class="md:hidden">·</span>}
 				{key === lang ? (
-					<span aria-current="true">{name}</span>
+					<span aria-current="true" class="text-ink">
+						<span class="md:hidden">{languageShortNames[key as LanguageKey]}</span>
+						<span class="hidden md:inline">{name}</span>
+					</span>
 				) : (
-					<a href={translatePath(path, key as LanguageKey)}>{name}</a>
+					<a href={translatePath(path, key as LanguageKey)} aria-label={name}>
+						<span class="md:hidden">{languageShortNames[key as LanguageKey]}</span>
+						<span class="hidden md:inline">{name}</span>
+					</a>
 				)}
-			</span>
+			</>
 		))
-	}]
+	}
 </nav>
