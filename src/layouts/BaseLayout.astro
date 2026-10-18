@@ -4,6 +4,7 @@ import { getEntry } from 'astro:content';
 import AppFooter from '@/components/AppFooter.astro';
 import AppNavbar from '@/components/AppNavbar.astro';
 import LanguagePicker from '@/components/LanguagePicker.astro';
+import AppLogo from '@/components/AppLogo.astro';
 import { languageTags } from '@/i18n/ui';
 import { getLangFromUrl, getPathFromUrl, useTranslatedPath, useTranslations } from '@/i18n/utils';
 import { buildNav } from '@/utils/nav';
@@ -50,9 +51,7 @@ const homeUrl = translatePath('/');
 				data-test="navbar"
 				class="flex min-w-0 items-center gap-4 md:w-full md:flex-col md:items-start"
 			>
-				<a class="text-2xl leading-none font-bold tracking-tight" href={homeUrl}>
-					{brand.name}<span class="ml-1 animate-blink text-accent" aria-hidden="true">█</span>
-				</a>
+				<AppLogo name={brand.name} href={homeUrl} />
 				<AppNavbar navigation={nav} />
 			</header>
 			<div class="shrink-0 md:mt-auto">
