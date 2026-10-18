@@ -1,10 +1,9 @@
 name: Deploy
 
 on:
-  # !IMPORTANT: Every branch for now, so the deploy can be exercised before it
-  # lands on the default branch. Narrow this back to `branches: [main]` when
-  # the pipeline is trusted.
   push:
+    branches:
+      - main
   workflow_dispatch:
 
 # Read the repo; the deploy job additionally gets `pages: write` + `id-token: write`.
@@ -58,6 +57,9 @@ jobs:
   deploy-github-pages:
     needs: [build]
     runs-on: ubuntu-latest
+    # !IMPORTANT: The `github-pages` environment only admits refs its deployment
+    # branch rules allow, and that takes precedence over the `on: push` filter
+    # above. Keeping this on `main` means the two agree.
     permissions:
       pages: write
       id-token: write
