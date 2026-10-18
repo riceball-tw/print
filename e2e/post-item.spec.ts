@@ -1,6 +1,11 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+// Post rows are the list items holding a link into `/{lang}/posts/…`; on the
+// posts index the first list in `main` is the category nav instead.
+const postRows = (page: Page) =>
+  page.getByRole("main").locator("li").filter({ has: page.locator('a[href*="/posts/"]') });
 
 test("home lists posts with a link to each post and its date", async ({ page }) => {
   await page.goto("/en/");
@@ -14,7 +19,7 @@ test("home lists posts with a link to each post and its date", async ({ page }) 
 test("the posts index lists posts with a link and a date", async ({ page }) => {
   await page.goto("/en/posts/");
 
-  const rows = page.getByRole("main").getByRole("listitem");
+  const rows = postRows(page);
   await expect(rows).not.toHaveCount(0);
   await expect(rows.first().getByRole("link")).toHaveAttribute("href", /^\/en\/posts\/.+\/$/);
   await expect(rows.first().getByText(datePattern)).toBeVisible();

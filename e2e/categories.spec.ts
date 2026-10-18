@@ -71,6 +71,50 @@ test("the category list sits beside the sidebar instead of centered", async ({ p
   expect(navBox.x - (sidebarBox.x + sidebarBox.width)).toBeLessThan(48);
 });
 
+test("the posts page flows from the category list into the posts", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto("/en/posts/");
+
+  const nav = categoriesNav(page);
+  const firstPost = postRows(page).first();
+  await expect(nav).toBeVisible();
+  await expect(firstPost).toBeVisible();
+
+  // Left-to-right: the categories hug the sidebar, the posts sit beside them.
+  const sidebarBox = (await page.getByTestId("sidebar").boundingBox())!;
+  const navBox = (await nav.boundingBox())!;
+  const postBox = (await firstPost.boundingBox())!;
+  expect(navBox.x - (sidebarBox.x + sidebarBox.width)).toBeLessThan(48);
+  expect(postBox.x).toBeGreaterThan(navBox.x);
+
+  // No category is being browsed here, so none is marked current.
+  await expect(nav.locator('[aria-current="page"]')).toHaveCount(0);
+});
+
+test("a post page shows the category list with its own category current", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto("/en/posts/hunting-a-flaky-e2e-test/");
+
+  const nav = categoriesNav(page);
+  const article = page.getByRole("main").getByRole("article");
+  await expect(nav).toBeVisible();
+  await expect(article).toBeVisible();
+
+  // Left-to-right: the categories hug the sidebar, the article sits beside them.
+  const sidebarBox = (await page.getByTestId("sidebar").boundingBox())!;
+  const navBox = (await nav.boundingBox())!;
+  const articleBox = (await article.boundingBox())!;
+  expect(navBox.x - (sidebarBox.x + sidebarBox.width)).toBeLessThan(48);
+  expect(articleBox.x).toBeGreaterThan(navBox.x);
+
+  // The post's own category is the one marked current.
+  await expect(nav.getByRole("link", { name: "CI-CD", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
+});
+
 test("the category list stacks above the posts on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/en/categories/css/");

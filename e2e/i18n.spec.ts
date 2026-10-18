@@ -96,7 +96,13 @@ test("each language lists posts under its own path and links into them", async (
   for (const lang of Object.keys(languages)) {
     await page.goto(`/${lang}/posts/`);
 
-    const link = page.getByRole("main").getByRole("listitem").first().getByRole("link");
+    // Scope to post rows: the first list in `main` is the category nav.
+    const link = page
+      .getByRole("main")
+      .locator("li")
+      .filter({ has: page.locator(`a[href^="/${lang}/posts/"]`) })
+      .first()
+      .getByRole("link");
     // The slug must not carry the language again, e.g. /en/posts/en/...
     await expect(link).toHaveAttribute("href", new RegExp(`^/${lang}/posts/(?!${lang}/)`));
 
