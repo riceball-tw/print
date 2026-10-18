@@ -37,4 +37,33 @@ describe("CategoryNav", () => {
 
     expect(html).not.toContain("aria-current");
   });
+
+  it("shows a short preview with a collapsed disclosure for the rest", async () => {
+    const html = await renderNav(["AI", "Astro", "CSS", "Go", "Vue"]);
+
+    // No `open` attribute: starts collapsed.
+    const detailsTag = html.match(/<details\b[^>]*>/)?.[0];
+    expect(detailsTag).toBeDefined();
+    expect(detailsTag).not.toContain("open");
+
+    // Summary states the hidden count.
+    const summary = html.match(/<summary\b[^>]*>([\s\S]*?)<\/summary>/)?.[1] ?? "";
+    expect(summary).toContain("2 more");
+  });
+
+  it("keeps the preview categories out of the disclosure and the rest inside", async () => {
+    const html = await renderNav(["AI", "Astro", "CSS", "Go", "Vue"]);
+    const details = html.match(/<details\b[\s\S]*<\/details>/)?.[0] ?? "";
+
+    expect(details).not.toContain('href="/en/categories/ai/"');
+    expect(details).toContain('href="/en/categories/go/"');
+    expect(details).toContain('href="/en/categories/vue/"');
+  });
+
+  it("omits the disclosure when every category fits in the preview", async () => {
+    const html = await renderNav(["AI", "Astro", "CSS"]);
+
+    expect(html).not.toContain("<details");
+    expect(html).toContain('href="/en/categories/css/"');
+  });
 });

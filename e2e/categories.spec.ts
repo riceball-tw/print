@@ -115,6 +115,46 @@ test("a post page shows the category list with its own category current", async 
   await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
 });
 
+test("the category list shows a preview with a control for the rest on a narrow screen", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto("/en/categories/css/");
+
+  const nav = categoriesNav(page);
+
+  // A few categories up front; the rest behind the control.
+  await expect(nav.getByRole("link", { name: "AI", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "CSS", exact: true })).toBeHidden();
+  await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
+
+  // The control reveals the rest, current one still marked.
+  await page.getByTestId("category-more").click();
+  await expect(nav.getByRole("link", { name: "CSS", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "CSS", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+});
+
+test("the full category list is shown without interaction on a wide screen", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto("/en/categories/css/");
+
+  const nav = categoriesNav(page);
+
+  // Every category visible up front; the control is gone.
+  await expect(
+    nav.getByRole("link", { name: "Functional Programming", exact: true }),
+  ).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Web Performance", exact: true })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "CSS", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(page.getByTestId("category-more")).toBeHidden();
+});
+
 test("the category list stacks above the posts on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/en/categories/css/");
