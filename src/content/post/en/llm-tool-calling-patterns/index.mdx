@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Design tool schemas, error feedback loops, and stop conditions so agents fail loudly instead of silently.'
+headline: 'Understand tool calling patterns for reliable LLM agents'
+excerpt: 'Covers the three patterns we run in production: single-shot tool calls, planner-executor loops, and human-in-the-loop confirmation, plus the failure mode each one introduces.'
+category: 'AI'
+publishDate: 2024-09-12
+---
+
+## Introduction
+
+Covers the three patterns we run in production: single-shot tool calls, planner-executor loops, and human-in-the-loop confirmation, plus the failure mode each one introduces.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around AI problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.

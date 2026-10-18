@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Parse subcommands, environment variables, and config files without gluing five libraries together by hand.'
+headline: 'Build a Go CLI with Cobra and persistent flags'
+excerpt: 'We scaffold a small sync tool, define nested subcommands, and wire persistent flags so the behavior matches familiar GNU tools. Also covered: how Cobra cooperates with the standard flag package.'
+category: 'Go'
+publishDate: 2024-03-05
+---
+
+## Introduction
+
+We scaffold a small sync tool, define nested subcommands, and wire persistent flags so the behavior matches familiar GNU tools. Also covered: how Cobra cooperates with the standard flag package.
+
+## What usually goes wrong
+
+Teams that skip this step tend to share three failure modes:
+
+- Optimizing a number nobody agreed to move.
+- Copying a setup from a project with different constraints.
+- Deferring the decision until it is expensive to reverse.
+
+## How to approach it
+
+1. State the problem in one sentence, in the words your users would use.
+2. Pick a signal you can measure weekly, not just at launch.
+3. Timebox a small trial; a two-day spike beats a two-week debate.
+
+## Wrap-up
+
+If Go taught us anything, it is that boring consistency beats clever one-offs. Bring the lessons back to your team before they fossilize into folklore.

@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Use %w, errors.Is, and errors.As so failures stay searchable in production logs.'
+headline: 'Wrap Go errors without losing the story'
+excerpt: 'Every fmt.Errorf loses context unless you use %w. This post covers the wrapping rules, when to define sentinel errors, and how to keep error chains stack-free but still useful.'
+category: 'Go'
+publishDate: 2023-06-21
+---
+
+## Introduction
+
+Every fmt.Errorf loses context unless you use %w. This post covers the wrapping rules, when to define sentinel errors, and how to keep error chains stack-free but still useful.
+
+## What usually goes wrong
+
+Teams that skip this step tend to share three failure modes:
+
+- Optimizing a number nobody agreed to move.
+- Copying a setup from a project with different constraints.
+- Deferring the decision until it is expensive to reverse.
+
+## How to approach it
+
+1. State the problem in one sentence, in the words your users would use.
+2. Pick a signal you can measure weekly, not just at launch.
+3. Timebox a small trial; a two-day spike beats a two-week debate.
+
+## Wrap-up
+
+If Go taught us anything, it is that boring consistency beats clever one-offs. Bring the lessons back to your team before they fossilize into folklore.

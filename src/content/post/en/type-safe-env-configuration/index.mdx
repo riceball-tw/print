@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Fail at boot, not at 2 a.m., when a required variable is missing.'
+headline: 'Load environment variables with type-safe configuration'
+excerpt: 'A pattern for parsing and defaulting env vars into a frozen config object, with coercion for ports and booleans and an error message that lists exactly what is missing.'
+category: 'TypeScript'
+publishDate: 2026-01-20
+---
+
+## Introduction
+
+A pattern for parsing and defaulting env vars into a frozen config object, with coercion for ports and booleans and an error message that lists exactly what is missing.
+
+## What usually goes wrong
+
+Teams that skip this step tend to share three failure modes:
+
+- Optimizing a number nobody agreed to move.
+- Copying a setup from a project with different constraints.
+- Deferring the decision until it is expensive to reverse.
+
+## How to approach it
+
+1. State the problem in one sentence, in the words your users would use.
+2. Pick a signal you can measure weekly, not just at launch.
+3. Timebox a small trial; a two-day spike beats a two-week debate.
+
+## Wrap-up
+
+If TypeScript taught us anything, it is that boring consistency beats clever one-offs. Bring the lessons back to your team before they fossilize into folklore.

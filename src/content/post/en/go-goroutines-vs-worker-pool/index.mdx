@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Fan-out looks great until one slow job takes down your latency budget.'
+headline: 'Compare goroutines and a worker pool'
+excerpt: 'Spawning a goroutine per request is idiomatic and dangerous at the same time. We measure unbounded concurrency against a bounded pool, then size the queue from real numbers instead of intuition.'
+category: 'Go'
+publishDate: 2025-01-19
+---
+
+## Introduction
+
+Spawning a goroutine per request is idiomatic and dangerous at the same time. We measure unbounded concurrency against a bounded pool, then size the queue from real numbers instead of intuition.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around Go problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.

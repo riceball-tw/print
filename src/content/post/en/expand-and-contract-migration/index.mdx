@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Add, migrate, then remove: a three-phase pattern that keeps old and new code running side by side.'
+headline: 'Ship database changes safely with expand and contract'
+excerpt: 'Walks through renaming a column with zero downtime, including the dual-write window and how to prove both paths agree before you drop the old one.'
+category: 'Pattern'
+publishDate: 2024-11-19
+---
+
+## Introduction
+
+Walks through renaming a column with zero downtime, including the dual-write window and how to prove both paths agree before you drop the old one.
+
+## Small things that compounded
+
+Looking back over Pattern work, the wins were unglamorous: a naming fix, a deleted config, a checklist nobody has had to edit since.
+
+## What made them stick
+
+- They were owned by one person, not a committee.
+- They shipped with a way to notice when they stopped working.
+- They removed a decision instead of documenting one.
+
+## Steal this
+
+Pick the irritation you have mentioned three times this month. That is your next project — it has already proven its staying power.
+
+## Closing
+
+Big rewrites make better stories; small compounding makes better systems.

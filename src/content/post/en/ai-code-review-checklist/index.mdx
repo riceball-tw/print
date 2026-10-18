@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Twelve things to verify before you accept a suggestion you did not write yourself.'
+headline: 'A checklist for reviewing AI-generated code'
+excerpt: 'AI output tends to look confident and be subtly wrong, so this checklist focuses on where it usually breaks: error handling, boundary conditions, and invented APIs.'
+category: 'AI'
+publishDate: 2026-03-05
+---
+
+## Introduction
+
+AI output tends to look confident and be subtly wrong, so this checklist focuses on where it usually breaks: error handling, boundary conditions, and invented APIs.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around AI problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.

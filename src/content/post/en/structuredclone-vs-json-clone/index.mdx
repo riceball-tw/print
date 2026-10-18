@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Why your deep copy silently drops Dates, Maps, and circular references.'
+headline: 'Compare structuredClone and JSON round-tripping'
+excerpt: 'JSON.parse(JSON.stringify(x)) is the deep copy everyone writes on day one. This comparison shows what it loses, what structuredClone handles, and when you should reach for a third option.'
+category: 'JavaScript'
+publishDate: 2025-07-14
+---
+
+## Introduction
+
+JSON.parse(JSON.stringify(x)) is the deep copy everyone writes on day one. This comparison shows what it loses, what structuredClone handles, and when you should reach for a third option.
+
+## What usually goes wrong
+
+Teams that skip this step tend to share three failure modes:
+
+- Optimizing a number nobody agreed to move.
+- Copying a setup from a project with different constraints.
+- Deferring the decision until it is expensive to reverse.
+
+## How to approach it
+
+1. State the problem in one sentence, in the words your users would use.
+2. Pick a signal you can measure weekly, not just at launch.
+3. Timebox a small trial; a two-day spike beats a two-week debate.
+
+## Wrap-up
+
+If JavaScript taught us anything, it is that boring consistency beats clever one-offs. Bring the lessons back to your team before they fossilize into folklore.

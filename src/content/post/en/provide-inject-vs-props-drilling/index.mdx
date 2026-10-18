@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'When skipping levels is fine, when it hides dependencies, and how to keep both readable.'
+headline: 'Compare provide/inject with props drilling in Vue 3'
+excerpt: 'Uses a theme-and-auth example to show where provide/inject reduces noise and where it makes the data flow harder to trace.'
+category: 'Vue'
+publishDate: 2023-06-12
+---
+
+## Introduction
+
+Uses a theme-and-auth example to show where provide/inject reduces noise and where it makes the data flow harder to trace.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around Vue problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.

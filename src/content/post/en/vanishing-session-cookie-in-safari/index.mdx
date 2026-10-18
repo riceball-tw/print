@@ -1,0 +1,32 @@
+---
+isDraft: false
+subHeadline: 'It only broke sessions created on a Friday, which turned out to be the whole clue.'
+headline: 'Postmortem: a session cookie that kept vanishing in Safari'
+excerpt: 'How we traced intermittent logouts to Safari''s seven-day cookie cap and the partitioned storage changes sitting behind it.'
+category: 'Browser'
+publishDate: 2024-03-19
+---
+
+## Introduction
+
+How we traced intermittent logouts to Safari's seven-day cookie cap and the partitioned storage changes sitting behind it.
+
+## The mental model
+
+- Start from the smallest version that could work, and make it observable.
+- Write down the trade-off you are accepting, not only the feature you are shipping.
+- Revisit the decision when the team grows; most choices in Browser have a shelf life.
+
+## A practical starting point
+
+1. Reproduce the situation on a scratch branch, next to a measurement you trust.
+2. Change one variable at a time, and keep the diff small enough to explain in one sentence.
+3. Keep the result, throw away the scaffolding.
+
+```bash
+git switch -c experiment/one-thing
+```
+
+## Closing thoughts
+
+None of this is doctrine. Treat it as a checklist you are allowed to disagree with — ideally with an experiment of your own that settles the argument.

@@ -1,0 +1,32 @@
+---
+isDraft: false
+subHeadline: '分組、排序並命名 middleware，讓路由檔讀起來像一份檢查清單。'
+headline: '讓路由保持可讀的 middleware 組織方式'
+excerpt: '比較放在 router 層與 app 層的時機、錯誤 middleware 的位置，以及如何避免 200 行的 index.js。'
+category: 'Express.js'
+publishDate: 2023-11-14
+---
+
+## 前言
+
+比較放在 router 層與 app 層的時機、錯誤 middleware 的位置，以及如何避免 200 行的 index.js。
+
+## 核心智模型
+
+- 從最小、能運作的版本開始，並讓它可觀測。
+- 把你正在承擔的取捨寫下來，而不只是寫下你交付了什麼功能。
+- 團隊規模改變時重新檢視決策；Express.js 的多數選擇都有保存期限。
+
+## 實作起點
+
+1. 在實驗分支重現情境，並放在你信任的量測指標旁邊。
+2. 一次只改變一個變數，讓 diff 小到能用一句話解釋清楚。
+3. 保留成果、丟掉腳手架。
+
+```bash
+git switch -c experiment/one-thing
+```
+
+## 結語
+
+這裡沒有教條。把它當成一份你有權不同意的檢查清單——最好附上你自己的實驗結果。

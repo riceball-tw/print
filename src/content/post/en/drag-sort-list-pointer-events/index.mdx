@@ -1,0 +1,32 @@
+---
+isDraft: false
+subHeadline: 'A sortable list with keyboard support and zero drag-and-drop dependencies.'
+headline: 'Build a drag-to-sort list with Pointer Events'
+excerpt: 'You will implement hit testing, placeholder gaps, and pointer capture so items follow the cursor smoothly. The same code works for mouse and touch, and still degrades to keyboard reordering.'
+category: 'JavaScript'
+publishDate: 2024-01-30
+---
+
+## Introduction
+
+You will implement hit testing, placeholder gaps, and pointer capture so items follow the cursor smoothly. The same code works for mouse and touch, and still degrades to keyboard reordering.
+
+## The mental model
+
+- Start from the smallest version that could work, and make it observable.
+- Write down the trade-off you are accepting, not only the feature you are shipping.
+- Revisit the decision when the team grows; most choices in JavaScript have a shelf life.
+
+## A practical starting point
+
+1. Reproduce the situation on a scratch branch, next to a measurement you trust.
+2. Change one variable at a time, and keep the diff small enough to explain in one sentence.
+3. Keep the result, throw away the scaffolding.
+
+```bash
+git switch -c experiment/one-thing
+```
+
+## Closing thoughts
+
+None of this is doctrine. Treat it as a checklist you are allowed to disagree with — ideally with an experiment of your own that settles the argument.

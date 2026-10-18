@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'A bad reset is not the end: Git remembers where your HEAD has been for about 90 days.'
+headline: 'Recover lost commits with git reflog'
+excerpt: 'Shows how reflog survives branch deletion and failed rebases, plus a rescue script for the case where the branch pointer itself is gone.'
+category: 'Git'
+publishDate: 2024-08-27
+---
+
+## Introduction
+
+Shows how reflog survives branch deletion and failed rebases, plus a rescue script for the case where the branch pointer itself is gone.
+
+## What usually goes wrong
+
+Teams that skip this step tend to share three failure modes:
+
+- Optimizing a number nobody agreed to move.
+- Copying a setup from a project with different constraints.
+- Deferring the decision until it is expensive to reverse.
+
+## How to approach it
+
+1. State the problem in one sentence, in the words your users would use.
+2. Pick a signal you can measure weekly, not just at launch.
+3. Timebox a small trial; a two-day spike beats a two-week debate.
+
+## Wrap-up
+
+If Git taught us anything, it is that boring consistency beats clever one-offs. Bring the lessons back to your team before they fossilize into folklore.

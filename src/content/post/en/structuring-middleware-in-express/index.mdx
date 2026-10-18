@@ -1,0 +1,32 @@
+---
+isDraft: false
+subHeadline: 'Group, order, and name your middleware so a route file reads like a checklist.'
+headline: 'Structure middleware so routes stay readable'
+excerpt: 'Covers router-level vs app-level placement, error middleware position, and how to avoid the 200-line index.js.'
+category: 'Express.js'
+publishDate: 2023-11-14
+---
+
+## Introduction
+
+Covers router-level vs app-level placement, error middleware position, and how to avoid the 200-line index.js.
+
+## The mental model
+
+- Start from the smallest version that could work, and make it observable.
+- Write down the trade-off you are accepting, not only the feature you are shipping.
+- Revisit the decision when the team grows; most choices in Express.js have a shelf life.
+
+## A practical starting point
+
+1. Reproduce the situation on a scratch branch, next to a measurement you trust.
+2. Change one variable at a time, and keep the diff small enough to explain in one sentence.
+3. Keep the result, throw away the scaffolding.
+
+```bash
+git switch -c experiment/one-thing
+```
+
+## Closing thoughts
+
+None of this is doctrine. Treat it as a checklist you are allowed to disagree with — ideally with an experiment of your own that settles the argument.

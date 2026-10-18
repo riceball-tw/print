@@ -24,8 +24,16 @@ test("each language renders with its own lang attribute", async ({ page }) => {
 test("navigation and page copy are translated per language", async ({ page }) => {
   await page.goto("/zh-cn/");
 
-  await expect(page.getByRole("link", { name: "首页" })).toHaveAttribute("href", "/zh-cn/");
-  await expect(page.getByRole("link", { name: "文章" })).toHaveAttribute("href", "/zh-cn/posts");
+  // `exact` keeps post titles that happen to contain these words from
+  // matching the navigation links.
+  await expect(page.getByRole("link", { name: "首页", exact: true })).toHaveAttribute(
+    "href",
+    "/zh-cn/",
+  );
+  await expect(page.getByRole("link", { name: "文章", exact: true })).toHaveAttribute(
+    "href",
+    "/zh-cn/posts",
+  );
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Print");
   await expect(page.getByText("按分类浏览文章")).toBeAttached();
 });
@@ -99,10 +107,10 @@ test("each language lists posts under its own path and links into them", async (
 });
 
 test("a translated post renders its own language's content", async ({ page }) => {
-  await page.goto("/en/posts/veevalidate/");
+  await page.goto("/en/posts/astro-islands-explained/");
   const enHeadline = await page.getByRole("heading", { level: 1 }).textContent();
 
-  await page.goto("/zh-tw/posts/veevalidate/");
+  await page.goto("/zh-tw/posts/astro-islands-explained/");
   const twHeadline = await page.getByRole("heading", { level: 1 }).textContent();
 
   expect(twHeadline).not.toBe(enHeadline);

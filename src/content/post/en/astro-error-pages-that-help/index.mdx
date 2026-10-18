@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Turn the default 404 and 500 screens into pages that explain what happened and what to do next.'
+headline: 'Build Astro error pages that actually help users'
+excerpt: 'Custom error pages are usually the last thing anyone builds. This walkthrough covers the 404.astro and 500.astro routes, logging failed requests, and keeping error pages fast when the server is already struggling.'
+category: 'Astro'
+publishDate: 2026-06-18
+---
+
+## Introduction
+
+Custom error pages are usually the last thing anyone builds. This walkthrough covers the 404.astro and 500.astro routes, logging failed requests, and keeping error pages fast when the server is already struggling.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around Astro problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.

@@ -1,0 +1,30 @@
+---
+isDraft: false
+subHeadline: 'Dirty reads, lost updates, and repeatable reads explained with the same bank-transfer example.'
+headline: 'Understand transactions and isolation levels'
+excerpt: 'Maps each SQL isolation level to the anomalies it prevents, then shows which level your service actually needs.'
+category: 'Database'
+publishDate: 2024-07-16
+---
+
+## Introduction
+
+Maps each SQL isolation level to the anomalies it prevents, then shows which level your service actually needs.
+
+## Field notes
+
+A few patterns we kept seeing while puttering around Database problems:
+
+- The simple version survived every refactor; the clever version didn't.
+- Documentation written during the work aged far better than documentation written after.
+- The second time a problem shows up, it is already a pattern — name it.
+
+## A checklist you can steal
+
+- [ ] The failure is reproducible with one command.
+- [ ] The fix has a test that fails without it.
+- [ ] Someone other than the author has run it on their machine.
+
+## Closing
+
+Write the short version future-you will actually read. That is the whole trick.
