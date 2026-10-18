@@ -1,10 +1,11 @@
 ---
 import { defaultLang } from '@/i18n/ui';
+import { withBase } from '@/utils/base';
 
 // The default language is served under `/{lang}/`, so send bare `/` there.
 // A meta refresh works on any static host. See:
 // https://docs.astro.build/en/recipes/i18n/#set-up-pages-for-each-language
-const target = `/${defaultLang}/`;
+const target = withBase(`/${defaultLang}/`);
 ---
 
 <meta http-equiv="refresh" content={`0;url=${target}`} />

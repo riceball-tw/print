@@ -1,4 +1,5 @@
 import { defaultLang, ui, type LanguageKey, type TranslationKey } from "./ui";
+import { stripBase, withBase } from "@/utils/base";
 
 /** Narrow an arbitrary string (e.g. a URL segment) to a supported language. */
 export function isLanguageKey(value: string | undefined): value is LanguageKey {
@@ -27,7 +28,7 @@ export function getSlugFromId(id: string): string {
 
 /** Detect the page language from the current URL, falling back to the default. */
 export function getLangFromUrl(url: URL): LanguageKey {
-  const [, lang] = url.pathname.split("/");
+  const [, lang] = stripBase(url.pathname).split("/");
   return isLanguageKey(lang) ? lang : defaultLang;
 }
 
@@ -36,7 +37,7 @@ export function getLangFromUrl(url: URL): LanguageKey {
  * becomes `/posts/`. Used to link between languages without losing the page.
  */
 export function getPathFromUrl(url: URL): string {
-  const segments = url.pathname.split("/").filter(Boolean);
+  const segments = stripBase(url.pathname).split("/").filter(Boolean);
   if (isLanguageKey(segments[0])) segments.shift();
   if (segments.length === 0) return "/";
   const trailingSlash = url.pathname.endsWith("/") ? "/" : "";
@@ -66,12 +67,15 @@ export function useTranslations(lang: LanguageKey = defaultLang) {
 }
 
 /**
- * Prefix a language-relative path with the target language.
+ * Prefix a language-relative path with the target language, then the
+ * deployment base (`/zh-tw/posts` at the root, `/print/zh-tw/posts` on a
+ * sub-path deployment).
  * @example useTranslatedPath("zh-tw")("/posts") => "/zh-tw/posts"
  */
 export function useTranslatedPath(lang: LanguageKey = defaultLang) {
   return function translatePath(path: string, target: LanguageKey = lang): string {
     const clean = path.startsWith("/") ? path : `/${path}`;
-    return clean === "/" ? `/${target}/` : `/${target}${clean}`;
+    const localized = clean === "/" ? `/${target}/` : `/${target}${clean}`;
+    return withBase(localized);
   };
 }
