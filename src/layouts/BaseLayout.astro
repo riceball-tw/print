@@ -8,6 +8,7 @@ import AppLogo from '@/components/AppLogo.astro';
 import { languageTags } from '@/i18n/ui';
 import { getLangFromUrl, getPathFromUrl, useTranslatedPath, useTranslations } from '@/i18n/utils';
 import { buildNav } from '@/utils/nav';
+import { withBase } from '@/utils/base';
 
 interface Props {
 	title: string;
@@ -36,8 +37,8 @@ const homeUrl = translatePath('/');
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+		<link rel="icon" href={withBase('/favicon.ico')} />
 		<title>{title}</title>
 		<slot name="head" />
 	</head>

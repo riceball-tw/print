@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   getLangFromId,
   getLangFromUrl,
@@ -90,5 +90,24 @@ describe("useTranslatedPath", () => {
 
   it("keeps a trailing slash on the root path", () => {
     expect(useTranslatedPath("en")("/")).toBe("/en/");
+  });
+});
+
+describe("with a configured deployment base", () => {
+  it("prefixes outgoing links and parses incoming URLs without it", async () => {
+    vi.stubEnv("PUBLIC_BASE_URL", "print");
+    vi.resetModules();
+
+    const i18n = await import("@/i18n/utils");
+
+    // Outgoing links carry the base so they resolve on a sub-path deployment…
+    expect(i18n.useTranslatedPath("en")("/posts")).toBe("/print/en/posts");
+    expect(i18n.useTranslatedPath("en")("/")).toBe("/print/en/");
+    // …while incoming URLs are parsed as if the base were not there.
+    expect(i18n.getLangFromUrl(new URL("https://example.com/print/en/posts/"))).toBe("en");
+    expect(i18n.getPathFromUrl(new URL("https://example.com/print/zh-tw/posts/"))).toBe("/posts/");
+
+    vi.unstubAllEnvs();
+    vi.resetModules();
   });
 });
