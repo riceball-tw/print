@@ -46,10 +46,7 @@ describe("PostItem", () => {
   });
 
   it("does not repeat the language when the post id is language-scoped", async () => {
-    const html = await renderPostItem(
-      { ...post, id: "zh-tw/alpha" },
-      "zh-tw",
-    );
+    const html = await renderPostItem({ ...post, id: "zh-tw/alpha" }, "zh-tw");
 
     expect(html).toMatch(/<a[^>]*href="\/zh-tw\/posts\/alpha\/"[^>]*>Alpha<\/a>/);
     expect(html).not.toContain("/zh-tw/posts/zh-tw/");

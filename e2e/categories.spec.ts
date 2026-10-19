@@ -6,7 +6,10 @@ const categoriesNav = (page: Page) =>
 // Post rows are the list items holding a link into `/{lang}/posts/…`; the
 // category list links into `/{lang}/categories/…` instead.
 const postRows = (page: Page) =>
-  page.getByRole("main").locator("li").filter({ has: page.locator('a[href*="/posts/"]') });
+  page
+    .getByRole("main")
+    .locator("li")
+    .filter({ has: page.locator('a[href*="/posts/"]') });
 
 test("home category headings link into that category's page", async ({ page }) => {
   await page.goto("/en/");
@@ -39,7 +42,10 @@ test("the category page marks the current category and lists only its posts", as
   );
 
   // The stated count matches the rows actually listed.
-  const countText = await page.getByRole("main").getByText(/^\d+ entries$/).textContent();
+  const countText = await page
+    .getByRole("main")
+    .getByText(/^\d+ entries$/)
+    .textContent();
   const count = Number(countText?.match(/^\d+/)?.[0]);
   expect(count).toBeGreaterThan(0);
   await expect(postRows(page)).toHaveCount(count);

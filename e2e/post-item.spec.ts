@@ -5,7 +5,10 @@ const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 // Post rows are the list items holding a link into `/{lang}/posts/…`; on the
 // posts index the first list in `main` is the category nav instead.
 const postRows = (page: Page) =>
-  page.getByRole("main").locator("li").filter({ has: page.locator('a[href*="/posts/"]') });
+  page
+    .getByRole("main")
+    .locator("li")
+    .filter({ has: page.locator('a[href*="/posts/"]') });
 
 test("home lists posts with a link to each post and its date", async ({ page }) => {
   await page.goto("/en/");
