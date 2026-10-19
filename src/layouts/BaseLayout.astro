@@ -78,9 +78,10 @@ const homeUrl = translatePath('/');
 				</button>
 			</div>
 		</div>
-		<div class="mt-(--navbar-height) md:mt-0 md:ml-(--navbar-width)">
+		<div class="mt-(--navbar-height) flex flex-1 flex-col md:mt-0 md:ml-(--navbar-width)">
 			<slot />
 			<AppFooter
+				class="mt-auto"
 				copyright={brand.copyright}
 				socials={brand.socials}
 				linksLabel={t('footer.links')}

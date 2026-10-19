@@ -79,6 +79,10 @@ html[data-theme="dark"] {
   body {
     margin: 0;
     min-height: 100vh;
+    /* The page column is a flex container so short pages can push the footer
+     * to the bottom of the viewport instead of trailing the content. */
+    display: flex;
+    flex-direction: column;
   }
 
   /* Everything the browser would otherwise space on its own, tamed. */
