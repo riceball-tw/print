@@ -9,6 +9,7 @@ import {
 } from "@/i18n/utils";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { categoriesByLang, postsByLang } from "@/utils/posts.ts";
+import { slugify } from "@/utils/slug";
 import { render } from "astro:content";
 
 export function getStaticPaths() {
@@ -42,7 +43,7 @@ const translatePath = useTranslatedPath(lang);
         <article>
           <header>
             <p class="label">
-              {publishDate.toISOString().slice(0, 10)} · {category}
+              {publishDate.toISOString().slice(0, 10)} · <a href={`${translatePath(`/categories/${slugify(category)}`)}/`}>{category}</a>
             </p>
             <h1 class="mt-2 text-3xl tracking-tight md:text-4xl">{headline}</h1>
             <p class="mt-3 text-lg text-muted">{subHeadline}</p>

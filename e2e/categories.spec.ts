@@ -121,6 +121,16 @@ test("a post page shows the category list with its own category current", async 
   await expect(nav.locator('[aria-current="page"]')).toHaveCount(1);
 });
 
+test("a post's category label links to its category page", async ({ page }) => {
+  await page.goto("/en/posts/hunting-a-flaky-e2e-test/");
+
+  const categoryLink = page.getByRole("article").getByRole("link", { name: "CI-CD", exact: true });
+  await expect(categoryLink).toHaveAttribute("href", "/en/categories/ci-cd/");
+  await categoryLink.click();
+  await expect(page).toHaveURL(/\/en\/categories\/ci-cd\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("CI-CD");
+});
+
 test("the category list shows a preview with a control for the rest on a narrow screen", async ({
   page,
 }) => {
