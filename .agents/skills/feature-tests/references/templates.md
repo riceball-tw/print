@@ -43,10 +43,7 @@ test("<feature> works for a visitor", async ({ page }) => {
 
   // Assert the feature's observable outcome.
   await expect(page.getByRole("heading", { name: "..." })).toBeVisible();
-  await expect(page.getByRole("link", { name: "..." })).toHaveAttribute(
-    "href",
-    "/expected/",
-  );
+  await expect(page.getByRole("link", { name: "..." })).toHaveAttribute("href", "/expected/");
 });
 ```
 
