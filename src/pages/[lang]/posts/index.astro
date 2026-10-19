@@ -20,9 +20,9 @@ const translatePath = useTranslatedPath(lang);
 
 <BaseLayout title={t('posts.title')} description={t('posts.description')}>
 	<main class="px-4 pt-6 pb-12">
-		<div class="md:grid md:grid-cols-[10rem_1fr] md:gap-8">
+		<div class="md:flex md:gap-8">
 			<CategoryNav categories={categories} lang={lang} />
-			<div>
+			<div class="md:min-w-0 md:flex-1">
 				<h1 class="text-3xl tracking-tight uppercase">{t('posts.title')}</h1>
 				<p class="label mt-2">
 					{t('posts.count', { count: posts.length })}

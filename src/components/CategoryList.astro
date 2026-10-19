@@ -1,34 +1,32 @@
 ---
-import type { LanguageKey } from '@/i18n/ui';
-import { useTranslatedPath } from '@/i18n/utils';
-import { slugify } from '@/utils/slug';
+import type { LanguageKey } from "@/i18n/ui";
+import { useTranslatedPath } from "@/i18n/utils";
+import { slugify } from "@/utils/slug";
 
 interface Props {
-	/** Categories to render, in display order. */
-	categories: string[];
-	/** Language prefix for the generated links. */
-	lang?: LanguageKey;
-	/** The category of the page being viewed; marked as the current one. */
-	active?: string;
+  /** Categories to render, in display order. */
+  categories: string[];
+  /** Language prefix for the generated links. */
+  lang?: LanguageKey;
+  /** The category of the page being viewed; marked as the current one. */
+  active?: string;
 }
 
-const { categories, lang = 'en', active } = Astro.props;
+const { categories, lang = "en", active } = Astro.props;
 
 const translatePath = useTranslatedPath(lang);
 ---
 
 <ul class="list-none space-y-1" role="list">
-	{
-		categories.map((name) => (
-			<li>
-				<a
-					href={`${translatePath(`/categories/${slugify(name)}`)}/`}
-					aria-current={name === active ? 'page' : undefined}
-					class={name === active ? 'text-accent' : undefined}
-				>
-					{name}
-				</a>
-			</li>
-		))
-	}
+  {categories.map((name) => (
+    <li>
+      <a
+        href={`${translatePath(`/categories/${slugify(name)}`)}/`}
+        aria-current={name === active ? "page" : undefined}
+        class={name === active ? "text-accent" : undefined}
+      >
+        {name}
+      </a>
+    </li>
+  ))}
 </ul>
