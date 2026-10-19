@@ -35,6 +35,16 @@
   --animate-blink: blink 1.1s steps(1, end) infinite;
 }
 
+/* The values are overridden together so every existing color utility follows
+ * the selected palette without each component needing a theme-specific rule. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #161615;
+  --color-ink: #f2f0eb;
+  --color-muted: #b2ada3;
+  --color-accent: #ff6b3d;
+}
+
 @keyframes blink {
   50% {
     opacity: 0;

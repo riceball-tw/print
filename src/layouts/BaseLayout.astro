@@ -40,6 +40,14 @@ const homeUrl = translatePath('/');
 		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 		<link rel="icon" href={withBase('/favicon.ico')} />
 		<title>{title}</title>
+		<script is:inline>
+			try {
+				document.documentElement.dataset.theme =
+					localStorage.getItem("theme") === "dark" ? "dark" : "light";
+			} catch {
+				document.documentElement.dataset.theme = "light";
+			}
+		</script>
 		<slot name="head" />
 	</head>
 	<body>
@@ -55,8 +63,19 @@ const homeUrl = translatePath('/');
 				<AppLogo name={brand.name} href={homeUrl} />
 				<AppNavbar navigation={nav} />
 			</header>
-			<div class="shrink-0 md:mt-auto">
+			<div class="flex shrink-0 items-center gap-4 md:mt-auto md:block">
 				<LanguagePicker lang={lang} path={path} label={t('language.select')} />
+				<button
+					data-test="theme-toggle"
+					type="button"
+					class="label cursor-pointer appearance-none border-0 bg-transparent p-0 text-muted hover:text-ink md:mt-5"
+					aria-label={t('theme.toggle')}
+					aria-pressed="false"
+					data-light-label={t('theme.light')}
+					data-dark-label={t('theme.dark')}
+				>
+					{t('theme.light')}
+				</button>
 			</div>
 		</div>
 		<div class="mt-(--navbar-height) md:mt-0 md:ml-(--navbar-width)">
@@ -67,5 +86,28 @@ const homeUrl = translatePath('/');
 				linksLabel={t('footer.links')}
 			/>
 		</div>
+		<script>
+			import { getTheme, themeStorageKey, toggleTheme } from '@/utils/theme';
+
+			const toggle = document.querySelector<HTMLButtonElement>('[data-test="theme-toggle"]');
+
+			const applyTheme = (theme: 'light' | 'dark') => {
+				document.documentElement.dataset.theme = theme;
+				toggle?.setAttribute('aria-pressed', String(theme === 'dark'));
+				if (toggle) {
+					toggle.textContent =
+						theme === 'dark' ? (toggle.dataset.darkLabel ?? '') : (toggle.dataset.lightLabel ?? '');
+				}
+			};
+
+			let theme = getTheme(localStorage.getItem(themeStorageKey));
+			applyTheme(theme);
+
+			toggle?.addEventListener('click', () => {
+				theme = toggleTheme(theme);
+				localStorage.setItem(themeStorageKey, theme);
+				applyTheme(theme);
+			});
+		</script>
 	</body>
 </html>

@@ -49,6 +49,9 @@ const en = {
   "common.top": "[ top ]",
   "footer.links": "connect:",
   "language.select": "Please select language",
+  "theme.toggle": "Toggle color theme",
+  "theme.light": "[light]",
+  "theme.dark": "[dark]",
 } as const;
 
 // `satisfies` keeps every language in sync with the English keys: adding a key
@@ -70,6 +73,9 @@ const zhCn = {
   "common.top": "[ 顶部 ]",
   "footer.links": "联系：",
   "language.select": "请选择语言",
+  "theme.toggle": "切换配色主题",
+  "theme.light": "[明亮]",
+  "theme.dark": "[黑暗]",
 } satisfies Record<keyof typeof en, string>;
 
 const zhTw = {
@@ -89,6 +95,9 @@ const zhTw = {
   "common.top": "[ 頂端 ]",
   "footer.links": "聯繫：",
   "language.select": "請選擇語言",
+  "theme.toggle": "切換配色主題",
+  "theme.light": "[明亮]",
+  "theme.dark": "[黑暗]",
 } satisfies Record<keyof typeof en, string>;
 
 export const ui = {
