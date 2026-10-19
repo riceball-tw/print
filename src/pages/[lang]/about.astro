@@ -1,0 +1,76 @@
+---
+import { languages, type LanguageKey } from '@/i18n/ui';
+import { getLangFromUrl, useTranslatedPath } from '@/i18n/utils';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+	return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const config = await getEntry('config', 'site');
+if (!config) throw new Error('Missing "site" entry in the config collection.');
+
+const lang = getLangFromUrl(Astro.url);
+const translatePath = useTranslatedPath(lang);
+const { brand } = config.data;
+
+const copy: Record<LanguageKey, {
+	kicker: string;
+	title: string;
+	description: string;
+	intro: string;
+	purpose: { label: string; title: string; body: string };
+	approach: { label: string; title: string; body: string };
+	archive: { label: string; title: string; body: string; link: string };
+}> = {
+	en: {
+		kicker: 'About / 01',
+		title: 'Notes for people who make things on the web.',
+		description: 'About Print, a notebook for practical work on the web.',
+		intro: 'Print is a small, independent notebook about the messy, useful work behind software: the systems, decisions, and habits that make a project hold together.',
+		purpose: { label: 'Purpose', title: 'Keep the useful parts in circulation.', body: 'We write down the patterns worth reusing, the trade-offs worth naming, and the lessons that are easier to share once they have been tested in the open.' },
+		approach: { label: 'Approach', title: 'Specific over performative.', body: 'Every piece starts close to the work. Expect clear examples, plain language, and enough context to decide whether an idea belongs in your own toolbox.' },
+		archive: { label: 'Archive', title: 'Browse by the problem in front of you.', body: 'The archive moves between interface craft, engineering practice, and the human side of making. It is meant to be read slowly, returned to often, and put to use.', link: 'Read the archive' },
+	},
+	'zh-cn': {
+		kicker: '关于 / 01',
+		title: '写给正在构建网络的人。',
+		description: '关于 Print：一本记录网络实践的小册。',
+		intro: 'Print 是一本小型独立笔记，记录软件背后那些杂乱却有用的工作：让项目经得起时间的系统、决定与习惯。',
+		purpose: { label: '目的', title: '让有用的经验持续流通。', body: '我们记录值得复用的模式、值得说清的取舍，以及那些经过实践后更容易分享的经验。' },
+		approach: { label: '方法', title: '具体，胜过表演。', body: '每篇文章都从真实工作出发。期待清楚的例子、平实的语言，以及足够的背景，帮助你判断一个想法是否适合自己的工具箱。' },
+		archive: { label: '归档', title: '从眼前的问题开始浏览。', body: '归档涵盖界面技艺、工程实践与做事中的人性面。它适合慢慢阅读、经常回访，并真正拿来使用。', link: '阅读归档' },
+	},
+	'zh-tw': {
+		kicker: '關於 / 01',
+		title: '寫給正在構築網路的人。',
+		description: '關於 Print：一本記錄網路實踐的小冊。',
+		intro: 'Print 是一本小型獨立筆記，記錄軟體背後那些雜亂卻有用的工作：讓專案經得起時間的系統、決定與習慣。',
+		purpose: { label: '目的', title: '讓有用的經驗持續流通。', body: '我們記錄值得重用的模式、值得說清的取捨，以及那些經過實踐後更容易分享的經驗。' },
+		approach: { label: '方法', title: '具體，勝過表演。', body: '每篇文章都從真實工作出發。期待清楚的例子、平實的語言，以及足夠的背景，幫助你判斷一個想法是否適合自己的工具箱。' },
+		archive: { label: '歸檔', title: '從眼前的問題開始瀏覽。', body: '歸檔涵蓋介面技藝、工程實踐與做事中的人性面。它適合慢慢閱讀、經常回訪，並真正拿來使用。', link: '閱讀歸檔' },
+	},
+};
+
+const content = copy[lang];
+---
+
+<BaseLayout title={`${brand.name} — ${content.kicker}`} description={content.description}>
+	<main class="px-4 pb-16 pt-6">
+		<div class="max-w-4xl">
+			<p class="label">{content.kicker}</p>
+			<h1 class="mt-4 max-w-3xl text-4xl leading-[0.98] tracking-[-0.045em] sm:text-5xl md:text-6xl">{content.title}</h1>
+			<p class="mt-8 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">{content.intro}</p>
+
+			<section class="mt-12 grid gap-x-12 gap-y-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" aria-label={content.kicker}>
+				<article class="border-t border-line pt-4"><p class="label">{content.purpose.label}</p><h2 class="mt-3 text-2xl">{content.purpose.title}</h2><p class="mt-4 max-w-prose leading-relaxed text-muted">{content.purpose.body}</p></article>
+				<article class="border-t border-line pt-4"><p class="label">{content.approach.label}</p><h2 class="mt-3 text-2xl">{content.approach.title}</h2><p class="mt-4 max-w-prose leading-relaxed text-muted">{content.approach.body}</p></article>
+				<article class="border-t border-line pt-4 md:col-span-2">
+					<p class="label">{content.archive.label}</p>
+					<div class="mt-3 flex flex-wrap items-end justify-between gap-5"><div class="max-w-xl"><h2 class="text-2xl">{content.archive.title}</h2><p class="mt-4 leading-relaxed text-muted">{content.archive.body}</p></div><a class="label shrink-0 text-ink" href={`${translatePath('/posts')}/`}>{content.archive.link} <span aria-hidden="true">↗</span></a></div>
+				</article>
+			</section>
+		</div>
+	</main>
+</BaseLayout>
