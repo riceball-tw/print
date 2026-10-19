@@ -1,49 +1,54 @@
 ---
 name: feature-tests
-description: Use whenever you add or change a feature. Requires every feature to ship with a Playwright browser test AND a Vitest unit test that verify the behavior, and both suites must pass before the work is done. Covers Astro pages, routes, content collections, and client-side interactivity.
+description: Add proportionate behavioral tests for meaningful feature changes. Use Vitest and Playwright when they provide distinct confidence; avoid style-only, redundant, or brittle tests.
 compatibility: Requires Node 22+, pnpm, and Playwright browsers (pnpm exec playwright install).
 ---
 
 # Feature Tests
 
-Every new or changed feature in this project must ship with **two tests** that
-verify its behavior:
+Add tests when a change introduces or materially changes observable behavior,
+decision logic, validation, data transformation, or a regression risk. Choose
+the smallest set of tests that gives useful confidence:
 
 1. a **browser test** (Playwright) that exercises the feature as a user would
 2. a **unit test** (Vitest) that pins the logic the feature depends on
 
-Do not report a feature as done, and do not stage/commit it, until both the
-unit and browser test exist and pass. A feature without tests is unfinished.
+Use both tests when they cover different risks. Do not add a test merely to
+satisfy a quota; documentation, copy, visual styling, formatting, refactors
+that preserve behavior, and other non-behavioral changes normally do not need
+new tests. Run every relevant test suite after changing tests or behavior.
 
 ## Hard rules
 
-- **One feature, one pair of tests.** Add at least one `*.test.ts` (unit) and
-  one browser assertion in `e2e/*.spec.ts` that fail if the feature breaks.
+- **Test the risk, not the diff.** Add a `*.test.ts`, a browser assertion in
+  `e2e/*.spec.ts`, or both only when it would catch a meaningful regression.
+  Prefer one focused test over several overlapping checks.
 - **Verify behavior, not implementation.** Assert what the user observes
   (rendered output, navigation, computed data). Do not assert on private
   helpers, CSS class names, or exact markup that is free to change.
-- **A test must fail before it passes.** Write it against the old/absent
-  behavior first, watch it fail for the right reason, then implement.
-- **Both commands must be green:** `pnpm test` and `pnpm test:e2e`.
-- If a test genuinely cannot be written, stop and explain why to the user
-  instead of silently skipping it. Never delete or weaken an existing test to
-  make a change fit.
+- **Keep tests durable.** Assert stable, user-meaningful outcomes and avoid
+  unnecessary edge cases, timing assumptions, exact copy, visual styling, or
+  markup details that are not part of the requirement.
+- **Run relevant commands:** `pnpm test` for unit-test or logic changes,
+  `pnpm test:e2e` for browser-covered behavior, and `pnpm lint` for changed
+  source or test files. Run both suites when both test types are relevant.
+- Do not delete or weaken an existing behavioral test merely to make a change
+  fit. Update it when the intended behavior has genuinely changed.
 
 ## Workflow
 
-1. **State the behavior.** In one sentence, write what the feature does and how
-   a user (or caller) would notice it working. That sentence is the test.
-2. **Unit test.** Put it next to the code as `src/**/*.test.ts` (Vitest picks up
-   `src/**/*.test.ts` only). Import through the `@/` alias, not relative paths.
-   Cover the happy path plus at least one edge case or branch.
-3. **Browser test.** Add or extend a spec in `e2e/*.spec.ts`. Start from
-   `page.goto("/")`, then locate elements by role or text and assert the
-   observable outcome of the feature.
-4. **Run the unit suite:** `pnpm test`. Fix failures.
-5. **Run the browser suite:** `pnpm test:e2e` (this builds, then runs Playwright
-   against the preview server). Fix failures.
-6. **Also run** `pnpm lint` so the new files pass the repo's linting.
-7. Only then consider the feature complete.
+1. **Identify the regression risk.** State the behavior that could break and
+   how a user or caller would notice it. If there is no meaningful behavioral
+   risk, do not invent a test.
+2. **Choose the lowest-cost useful level.** Use a unit test for logic and data
+   decisions; use a browser test for an important user flow or rendering
+   outcome; use both only when each catches a distinct failure mode.
+3. **Write a focused test.** Put unit tests next to code as `src/**/*.test.ts`
+   (import through `@/`), or extend `e2e/*.spec.ts` with a role/text-based
+   assertion of the meaningful outcome. Include an edge case only when it
+   represents a realistic branch or prior failure.
+4. **Run the relevant suite(s)** and `pnpm lint`. Fix failures before reporting
+   the behavioral change complete.
 
 See `references/templates.md` for copy-paste scaffolds and worked examples.
 
@@ -73,23 +78,21 @@ with no host.
 
 | Change type                                  | Unit test                        | Browser test                          |
 | -------------------------------------------- | -------------------------------- | ------------------------------------- |
-| Pure logic / data helpers                    | Required: inputs -> outputs      | Optional, only if surfaced on a page  |
-| Page, route, or rendered markup              | Only if logic is extracted       | Required: assert the rendered result  |
-| Content collection / schema                  | Required: schema accepts/rejects | Required: the entry renders on a page |
-| Interactive behavior (forms, client scripts) | Extract logic, unit test it      | Required: drive it and assert result  |
+| Pure logic / data helpers                    | Usually: inputs -> outputs       | Only if an important UI path needs it |
+| Page, route, or rendered markup              | If it contains nontrivial logic  | For meaningful user-facing behavior   |
+| Content collection / schema                  | For validation or transformations| If the rendered behavior is at risk   |
+| Interactive behavior (forms, client scripts) | For nontrivial extracted logic   | Usually: drive and assert the outcome |
 
-The default is **both**. Most features need the pair; the "Optional" cells above
-apply only when a browser test would add no new coverage.
+Use the table as a guide, not a quota. Skip tests that only restate styling,
+static copy, framework output, or already-covered behavior.
 
 ## Definition of done
 
-- [ ] Behavior stated as a testable sentence
-- [ ] Unit test added/updated under `src/**/*.test.ts`, covers happy path + edge
-- [ ] Browser test added/updated under `e2e/*.spec.ts`, asserts the outcome
-- [ ] New test failed before the feature and passes after
-- [ ] `pnpm test` green
-- [ ] `pnpm test:e2e` green
-- [ ] `pnpm lint` green
+- [ ] Meaningful behavioral risk assessed
+- [ ] Focused unit and/or browser coverage added when it would catch a regression
+- [ ] No style-only, redundant, or brittle assertions added
+- [ ] Relevant test suite(s) green
+- [ ] `pnpm lint` green when source or test files changed
 
 ## Anti-patterns
 
@@ -99,4 +102,8 @@ apply only when a browser test would add no new coverage.
   feature's effect.
 - A unit test that just re-implements the function inline and compares it to
   itself.
-- Marking the checkbox above without actually running the command.
+- Testing CSS, whitespace, static wording, or incidental DOM structure unless
+  it is explicitly part of the product requirement.
+- Adding edge cases only to inflate coverage, or duplicating the same assertion
+  across unit and browser tests without distinct value.
+- Marking the checklist complete without actually running the relevant command.
