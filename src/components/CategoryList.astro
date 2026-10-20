@@ -10,9 +10,11 @@ interface Props {
   lang?: LanguageKey;
   /** The category of the page being viewed; marked as the current one. */
   active?: string;
+  /** Base path for category links. Defaults to `/categories`. */
+  basePath?: string;
 }
 
-const { categories, lang = "en", active } = Astro.props;
+const { categories, lang = "en", active, basePath = "/categories" } = Astro.props;
 
 const translatePath = useTranslatedPath(lang);
 ---
@@ -21,7 +23,7 @@ const translatePath = useTranslatedPath(lang);
   {categories.map((name) => (
     <li>
       <a
-        href={`${translatePath(`/categories/${slugify(name)}`)}/`}
+        href={`${translatePath(`${basePath}/${slugify(name)}`)}/`}
         aria-current={name === active ? "page" : undefined}
         class={name === active ? "text-accent" : undefined}
       >

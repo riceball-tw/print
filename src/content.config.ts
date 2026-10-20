@@ -27,6 +27,17 @@ const navigationItemSchema = z.object({
   url: z.string(),
 });
 
+const shortpostSchema = z.object({
+  headline: z.string(),
+  publishDate: z.date(),
+  category: z.string().default("unsorted"),
+  social: z
+    .object({
+      threads: z.string().optional(),
+    })
+    .optional(),
+});
+
 // Site-wide configuration in src/data/config.json.
 //
 // The `file()` loader treats each top-level key as a collection entry `id`.
@@ -59,5 +70,13 @@ export const collections = {
       generateId: legacySlug,
     }),
     schema: postSchema,
+  }),
+  shortpost: defineCollection({
+    loader: glob({
+      pattern: "**/*.{md,mdx}",
+      base: "./src/content/shortpost",
+      generateId: legacySlug,
+    }),
+    schema: shortpostSchema,
   }),
 };

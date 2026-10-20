@@ -1,0 +1,28 @@
+---
+import { getSlugFromId } from '@/i18n/utils';
+import { formatDate } from '@/utils/date';
+import { withBase } from '@/utils/base';
+
+interface Props {
+	shortpost: {
+		id: string;
+		data: {
+			headline: string;
+			publishDate: Date;
+			category: string;
+		};
+	};
+	/** Language prefix for the link, so shortposts live under `/{lang}/shortposts/`. */
+	lang?: string;
+}
+
+const { shortpost, lang = 'en' } = Astro.props;
+---
+
+<li class="flex items-baseline gap-3 leading-snug">
+	<a class="min-w-0 truncate" href={withBase(`/${lang}/shortposts/${getSlugFromId(shortpost.id)}/`)}>
+		{shortpost.data.headline}
+	</a>
+	<span class="flex-1 border-b border-dotted border-ink/25" aria-hidden="true" />
+	<span class="shrink-0 font-mono text-xs text-muted">{formatDate(shortpost.data.publishDate)}</span>
+</li>

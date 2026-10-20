@@ -1,0 +1,48 @@
+---
+import CategoryNav from '@/components/CategoryNav.astro';
+import ShortpostFeed from '@/components/ShortpostFeed.astro';
+import { languages, type LanguageKey } from '@/i18n/ui';
+import {
+	getLangFromUrl,
+	getSlugFromId,
+	useTranslatedPath,
+	useTranslations,
+} from '@/i18n/utils';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { shortpostCategoriesByLang, shortpostsByLang } from '@/utils/shortposts';
+import { render } from 'astro:content';
+
+export function getStaticPaths() {
+	return (Object.keys(languages) as LanguageKey[]).flatMap((lang) =>
+		shortpostsByLang(lang).map((shortpost) => ({
+			params: { lang, slug: getSlugFromId(shortpost.id) },
+			props: { shortpost },
+		})),
+	);
+}
+
+const { shortpost } = Astro.props;
+const { Content } = await render(shortpost);
+const { headline, category } = shortpost.data;
+
+const lang = getLangFromUrl(Astro.url);
+const shortposts = shortpostsByLang(lang);
+const categories = shortpostCategoriesByLang(lang);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<BaseLayout title={headline} description={headline}>
+	<main class="px-4 pt-6 pb-12">
+		<div class="md:flex md:gap-8">
+			<CategoryNav categories={categories} lang={lang} active={category} basePath="/shortposts/categories" />
+			<div class="md:min-w-0 md:flex-1">
+				<ShortpostFeed shortposts={shortposts} currentSlug={shortpost.id} lang={lang}>
+					<Content />
+				</ShortpostFeed>
+				<hr class="mt-10" />
+				<p class="mt-3 font-mono text-xs"><a href={translatePath('/')}>{t('common.back')}</a></p>
+			</div>
+		</div>
+	</main>
+</BaseLayout>

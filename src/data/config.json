@@ -25,6 +25,10 @@
         "url": "/posts"
       },
       {
+        "translationKey": "nav.shortposts",
+        "url": "/shortposts"
+      },
+      {
         "translationKey": "nav.about",
         "url": "/about"
       }
