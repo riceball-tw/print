@@ -96,11 +96,11 @@ test("each language lists posts under its own path and links into them", async (
   for (const lang of Object.keys(languages)) {
     await page.goto(`/${lang}/posts/`);
 
-    // Scope to post rows: the first list in `main` is the category nav.
+    // Scope to post rows: the category nav links into `/posts/categories/…`.
     const link = page
       .getByRole("main")
       .locator("li")
-      .filter({ has: page.locator(`a[href^="/${lang}/posts/"]`) })
+      .filter({ has: page.locator(`a[href^="/${lang}/posts/"]:not([href*="/posts/categories/"])`) })
       .first()
       .getByRole("link");
     // The slug must not carry the language again, e.g. /en/posts/en/...

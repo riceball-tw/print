@@ -2,13 +2,14 @@ import { expect, test, type Page } from "@playwright/test";
 
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-// Post rows are the list items holding a link into `/{lang}/posts/…`; on the
-// posts index the first list in `main` is the category nav instead.
+// Post rows are the list items holding a link into `/{lang}/posts/…`; the
+// category nav links into `/{lang}/posts/categories/…` instead, so it is
+// excluded here.
 const postRows = (page: Page) =>
   page
     .getByRole("main")
     .locator("li")
-    .filter({ has: page.locator('a[href*="/posts/"]') });
+    .filter({ has: page.locator('a[href*="/posts/"]:not([href*="/posts/categories/"])') });
 
 test("home lists posts with a link to each post and its date", async ({ page }) => {
   await page.goto("/en/");

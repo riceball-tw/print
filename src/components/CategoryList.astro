@@ -10,11 +10,11 @@ interface Props {
   lang?: LanguageKey;
   /** The category of the page being viewed; marked as the current one. */
   active?: string;
-  /** Base path for category links. Defaults to `/categories`. */
+  /** Base path for category links. Defaults to `/posts/categories`. */
   basePath?: string;
 }
 
-const { categories, lang = "en", active, basePath = "/categories" } = Astro.props;
+const { categories, lang = "en", active, basePath = "/posts/categories" } = Astro.props;
 
 const translatePath = useTranslatedPath(lang);
 ---

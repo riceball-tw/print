@@ -55,13 +55,13 @@ test("following an internal link keeps the visitor inside the sub-path", async (
 });
 
 test("switching language stays inside the sub-path", async ({ page }) => {
-  await page.goto(`${BASE}/en/categories/css/`);
+  await page.goto(`${BASE}/en/posts/categories/css/`);
 
   await page
     .getByRole("navigation", { name: "Please select language" })
     .getByRole("link", { name: "繁體中文" })
     .click();
 
-  await expect(page).toHaveURL(new RegExp(`${BASE}/zh-tw/categories/css/$`));
+  await expect(page).toHaveURL(new RegExp(`${BASE}/zh-tw/posts/categories/css/$`));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("CSS");
 });

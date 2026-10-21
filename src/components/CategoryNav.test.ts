@@ -17,8 +17,8 @@ describe("CategoryNav", () => {
   it("renders one link per category, each pointing at its own page", async () => {
     const html = await renderNav(["CSS", "Functional Programming"]);
 
-    expect(html).toContain('href="/en/categories/css/"');
-    expect(html).toContain('href="/en/categories/functional-programming/"');
+    expect(html).toContain('href="/en/posts/categories/css/"');
+    expect(html).toContain('href="/en/posts/categories/functional-programming/"');
 
     const positions = ["CSS", "Functional Programming"].map((name) => html.indexOf(name));
     expect(positions).toEqual([...positions].sort((a, b) => a - b));
@@ -29,7 +29,7 @@ describe("CategoryNav", () => {
 
     const currentLink = html.match(/<a\b[^>]*aria-current="page"[^>]*>/)?.[0];
     expect(currentLink).toBeDefined();
-    expect(currentLink).toContain('href="/en/categories/css/"');
+    expect(currentLink).toContain('href="/en/posts/categories/css/"');
   });
 
   it("marks nothing as current when no category is active", async () => {
@@ -55,15 +55,15 @@ describe("CategoryNav", () => {
     const html = await renderNav(["AI", "Astro", "CSS", "Go", "Vue"]);
     const details = html.match(/<details\b[\s\S]*<\/details>/)?.[0] ?? "";
 
-    expect(details).not.toContain('href="/en/categories/ai/"');
-    expect(details).toContain('href="/en/categories/go/"');
-    expect(details).toContain('href="/en/categories/vue/"');
+    expect(details).not.toContain('href="/en/posts/categories/ai/"');
+    expect(details).toContain('href="/en/posts/categories/go/"');
+    expect(details).toContain('href="/en/posts/categories/vue/"');
   });
 
   it("omits the disclosure when every category fits in the preview", async () => {
     const html = await renderNav(["AI", "Astro", "CSS"]);
 
     expect(html).not.toContain("<details");
-    expect(html).toContain('href="/en/categories/css/"');
+    expect(html).toContain('href="/en/posts/categories/css/"');
   });
 });

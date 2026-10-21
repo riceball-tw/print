@@ -4,28 +4,29 @@ const categoriesNav = (page: Page) =>
   page.getByRole("main").getByRole("navigation", { name: /Categories|分类|分類/ });
 
 // Post rows are the list items holding a link into `/{lang}/posts/…`; the
-// category list links into `/{lang}/categories/…` instead.
+// category list links into `/{lang}/posts/categories/…` instead, so it is
+// excluded here.
 const postRows = (page: Page) =>
   page
     .getByRole("main")
     .locator("li")
-    .filter({ has: page.locator('a[href*="/posts/"]') });
+    .filter({ has: page.locator('a[href*="/posts/"]:not([href*="/posts/categories/"])') });
 
 test("home category headings link into that category's page", async ({ page }) => {
   await page.goto("/en/");
 
   const heading = page.getByRole("main").getByRole("heading", { level: 3 }).first();
   const link = heading.getByRole("link");
-  await expect(link).toHaveAttribute("href", /^\/en\/categories\/.+\/$/);
+  await expect(link).toHaveAttribute("href", /^\/en\/posts\/categories\/.+\/$/);
 
   const name = (await link.textContent())?.trim();
   await link.click();
-  await expect(page).toHaveURL(/\/en\/categories\/.+\/$/);
+  await expect(page).toHaveURL(/\/en\/posts\/categories\/.+\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(name!);
 });
 
 test("the category page marks the current category and lists only its posts", async ({ page }) => {
-  await page.goto("/en/categories/css/");
+  await page.goto("/en/posts/categories/css/");
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("CSS");
 
@@ -52,7 +53,7 @@ test("the category page marks the current category and lists only its posts", as
 });
 
 test("category pages exist per language with translated copy", async ({ page }) => {
-  await page.goto("/zh-cn/categories/css/");
+  await page.goto("/zh-cn/posts/categories/css/");
 
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-Hans");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("CSS");
@@ -66,7 +67,7 @@ test("category pages exist per language with translated copy", async ({ page }) 
 
 test("the category list sits beside the sidebar instead of centered", async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 });
-  await page.goto("/en/categories/css/");
+  await page.goto("/en/posts/categories/css/");
 
   const sidebarBox = (await page.getByTestId("sidebar").boundingBox())!;
   const navBox = (await categoriesNav(page).boundingBox())!;
@@ -125,9 +126,9 @@ test("a post's category label links to its category page", async ({ page }) => {
   await page.goto("/en/posts/hunting-a-flaky-e2e-test/");
 
   const categoryLink = page.getByRole("article").getByRole("link", { name: "CI-CD", exact: true });
-  await expect(categoryLink).toHaveAttribute("href", "/en/categories/ci-cd/");
+  await expect(categoryLink).toHaveAttribute("href", "/en/posts/categories/ci-cd/");
   await categoryLink.click();
-  await expect(page).toHaveURL(/\/en\/categories\/ci-cd\/$/);
+  await expect(page).toHaveURL(/\/en\/posts\/categories\/ci-cd\/$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("CI-CD");
 });
 
@@ -135,7 +136,7 @@ test("the category list shows a preview with a control for the rest on a narrow 
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/en/categories/css/");
+  await page.goto("/en/posts/categories/css/");
 
   const nav = categoriesNav(page);
 
@@ -155,7 +156,7 @@ test("the category list shows a preview with a control for the rest on a narrow 
 
 test("the full category list is shown without interaction on a wide screen", async ({ page }) => {
   await page.setViewportSize({ width: 1400, height: 900 });
-  await page.goto("/en/categories/css/");
+  await page.goto("/en/posts/categories/css/");
 
   const nav = categoriesNav(page);
 
@@ -173,7 +174,7 @@ test("the full category list is shown without interaction on a wide screen", asy
 
 test("the category list stacks above the posts on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/en/categories/css/");
+  await page.goto("/en/posts/categories/css/");
 
   const nav = categoriesNav(page);
   const firstPost = postRows(page).first();
