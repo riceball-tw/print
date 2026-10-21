@@ -61,7 +61,7 @@ const homeUrl = translatePath('/');
 				class="flex min-w-0 items-center gap-4 md:w-full md:flex-col md:items-start"
 			>
 				<AppLogo name={brand.name} href={homeUrl} />
-				<AppNavbar navigation={nav} />
+				<AppNavbar navigation={nav} path={path} />
 			</header>
 			<div class="flex shrink-0 items-center gap-4 md:mt-auto md:block">
 				<LanguagePicker lang={lang} path={path} label={t('language.select')} />
