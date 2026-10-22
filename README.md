@@ -1,43 +1,159 @@
-# Astro Starter Kit: Minimal
+# [Print](https://riceball-tw.github.io/print/en/)
+
+> A minimal, TUI-inspired blog theme powered by Astro v7
+
+## Key Features
+
+Start writing [posts](https://riceball-tw.github.io/print/en/posts/) or [shortposts](https://riceball-tw.github.io/print/en/shortposts/) in typed Markdown or MDX. Everything on the site — navigation, categories, translations, colors — is configured from files you own.
+
+- **Static by default** — a fully prerendered Astro site; JavaScript only where it earns its place
+- **Two content types** — long-form `post`s and feed-style `shortpost`s, each with its own index, detail page, and category pages
+- **Built-in i18n** — English, 简体中文, and 繁體中文, each served from its own subpath (`/en/`, `/zh-cn/`, `/zh-tw/`); translation keys are type-checked
+- **Typed content** — MDX/Markdown front matter validated with Zod, so a missing `headline` fails the build instead of the page
+- **TUI aesthetic** — a blinking cursor in the wordmark, `[bracketed]` active navigation items, monospace metadata, hairline rules
+- **Light & dark themes** — one toggle, persisted in `localStorage`, applied before first paint so there is no flash
+- **Responsive** — a fixed top bar on small screens, a fixed side rail on large ones
+- **Deploy-anywhere** — a configurable base path means the same build works at a domain root or under a GitHub Pages sub-path
+- **Tested** — Vitest unit tests next to the code, Playwright end-to-end tests for what a reader actually does
+- **CI/CD** — type checking, linting, tests, and GitHub Pages deployment on every push
+
+## Getting Started
+
+### Development
 
 ```sh
-pnpm create astro@latest -- --template minimal
+# 1. Clone the repository
+git clone https://github.com/riceball-tw/print.git .
+
+# 2. Install dependencies
+pnpm install
+
+# 3. Run development server
+pnpm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The site is served at `http://localhost:4321` and redirects to the default language (`/en/`).
 
-## 🚀 Project Structure
+### Build
 
-Inside of your Astro project, you'll see the following folders and files:
+```sh
+# Locally — deploy the contents of the `./dist` folder wherever you like
+pnpm install
+pnpm build
+pnpm preview
+```
+
+### Commands
+
+All commands run from the root of the project:
+
+| Command                | Action                                                        |
+| :--------------------- | :------------------------------------------------------------ |
+| `pnpm install`         | Installs dependencies                                         |
+| `pnpm dev`             | Starts the dev server at `localhost:4321`                     |
+| `pnpm build`           | Builds the production site into `./dist/`                     |
+| `pnpm preview`         | Previews the production build locally                         |
+| `pnpm test`            | Runs the Vitest unit tests once                               |
+| `pnpm test:watch`      | Runs the Vitest unit tests in watch mode                      |
+| `pnpm test:e2e`        | Builds the site and runs the Playwright suites                |
+| `pnpm test:e2e:deploy` | Runs the Playwright suite against a sub-path deployment build |
+| `pnpm typecheck`       | Runs `astro check`                                            |
+| `pnpm lint`            | Runs oxlint                                                   |
+| `pnpm lint:fix`        | Runs oxlint with `--fix`                                      |
+| `pnpm fmt`             | Formats the source with oxfmt                                 |
+| `pnpm fmt:check`       | Checks formatting without writing                             |
+| `pnpm astro ...`       | Runs CLI commands like `astro add`, `astro check`             |
+
+### Customization
+
+1. `src/data/config.json`: site config — brand name, description, copyright, social links, and navigation (labels are translation keys, paths are language-relative)
+
+2. `src/content/post`, `src/content/shortpost`: your writing (Markdown / MDX), one folder per language and slug
+
+3. `src/i18n/ui.ts`: translations and locale metadata — English is the source of truth, and every other language must define the same keys
+
+4. `src/styles/global.css`: the palette, typography, and layout tokens, plus the base and component styles
+
+5. `public`: static assets served as-is (favicon, images, and anything else you drop in)
+
+6. `src/utils`: the small pure helpers the pages are built from (dates, slugs, navigation, previews, grids, theme)
+
+7. `astro.config.mjs`: Astro configuration, including the deployment base path
+
+8. `.github/workflows`: the CI and GitHub Pages deployment pipelines
+
+### Writing content
+
+Content lives in `src/content/{post|shortpost}/{lang}/{slug}/index.mdx`. The language is the first path segment and the slug is the rest of the path.
+
+A post:
+
+```mdx
+---
+isDraft: false
+headline: "Understand Astro islands and partial hydration"
+subHeadline: "See how Astro ships a static page by default."
+excerpt: "Islands are the mental model behind Astro's promise to ship less JavaScript."
+category: "Astro"
+publishDate: 2023-08-14
+lastModifiedDate: 2023-09-02 # optional
+---
+```
+
+A shortpost:
+
+```mdx
+---
+headline: "Demo Shortpost"
+publishDate: 2024-04-22
+category: "Non-Technical Discussion"
+---
+```
+
+Draft posts (`isDraft: true`, the default) are visible in development and excluded from production builds.
+
+### Deployment
+
+The site is deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
+
+A GitHub Pages **project** site is served from a sub-path (`https://<owner>.github.io/<repo>/`), so set a repository variable named `PUBLIC_BASE_URL` to the repository name (`print`). For a site served from the domain root — a custom domain, Cloudflare Pages, Netlify — leave it empty. Every generated link goes through the base path, so one build is correct in both cases.
+
+See [`src/utils/base.ts`](src/utils/base.ts) for how the base path is resolved and applied.
+
+### Testing
+
+Unit tests live next to the code they cover (`src/**/*.test.ts`) and run with Vitest; end-to-end tests live in `e2e/` and run with Playwright against a preview build. A second suite in `e2e-deploy/` builds the site with `PUBLIC_BASE_URL=print` to check the deployment sub-path.
+
+```sh
+pnpm test       # unit tests
+pnpm test:e2e   # browser tests, including the sub-path deployment suite
+```
+
+## Project structure
 
 ```text
 /
-├── public/
+├── e2e/                 # Playwright tests for the root-served site
+├── e2e-deploy/          # Playwright tests for a sub-path deployment
+├── public/              # static assets (favicon, images)
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/      # Astro components (navbar, footer, post items, …)
+│   ├── content/         # posts and shortposts, one folder per language
+│   ├── data/            # site config (config.json)
+│   ├── i18n/            # translations and locale helpers
+│   ├── layouts/         # shared page shell
+│   ├── pages/           # routes, one folder per language
+│   ├── styles/          # global.css — tokens, base styles, components
+│   └── utils/           # pure helpers (dates, slugs, navigation, …)
+├── astro.config.mjs
+├── playwright.config.ts
+└── vitest.config.ts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Helping out
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+For questions or support, please open an issue on GitHub.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## License
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT
