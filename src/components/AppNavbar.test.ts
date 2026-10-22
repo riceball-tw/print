@@ -53,7 +53,8 @@ describe("AppNavbar", () => {
     const current = html.match(/<a\b[^>]*aria-current="page"[^>]*>/)?.[0];
     expect(current).toBeDefined();
     expect(current).toContain('href="/en/posts"');
-    expect(current).toContain("text-accent");
+    // The selection brackets are decorative, so the accessible name stays plain.
+    expect(current).toContain('aria-label="Posts"');
 
     const home = html.match(/<a\b[^>]*href="\/en\/"[^>]*>/)?.[0];
     expect(home).toBeDefined();

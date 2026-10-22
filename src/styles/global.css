@@ -198,6 +198,29 @@ html[data-theme="dark"] {
   }
 
   /*
+   * TUI selection marker. The item a user is currently on is wrapped in square
+   * brackets, like a highlighted row in a terminal menu. The brackets are
+   * generated text on empty pseudo-elements and inherit the item's colour, so
+   * the component decides how the current item looks — every place that uses
+   * the marker colours the whole item, brackets included. The gap around the
+   * label is a fixed distance rather than the surrounding letter-spacing,
+   * which differs between the monospace and the body type. Active elements
+   * also set `aria-label` so screen readers announce the plain label, not
+   * "[Label]".
+   */
+  .tui-active::before {
+    content: "[";
+    margin-inline-end: 0.13rem;
+    letter-spacing: 0;
+  }
+
+  .tui-active::after {
+    content: "]";
+    margin-inline-start: 0.13rem;
+    letter-spacing: 0;
+  }
+
+  /*
    * Rendered post body. Keeps the generous measure and rhythm of a printed
    * column while the rest of the site stays terse.
    */

@@ -22,7 +22,7 @@ const { shortposts, currentSlug, lang = 'en' } = Astro.props;
 			return (
 				<li>
 					<div class="flex items-baseline gap-3">
-						<a class={`min-w-0 truncate transition-opacity ${isActive ? 'font-bold opacity-100' : 'opacity-40 hover:opacity-100'}`} href={withBase(`/${lang}/shortposts/${slug}/`)}>
+						<a class={`min-w-0 truncate transition-opacity ${isActive ? 'tui-active text-accent font-bold opacity-100' : 'opacity-40 hover:opacity-100'}`} aria-label={isActive ? shortpost.data.headline : undefined} href={withBase(`/${lang}/shortposts/${slug}/`)}>
 							{shortpost.data.headline}
 						</a>
 						<span class="flex-1 border-b border-dotted border-ink/25" aria-hidden="true" />

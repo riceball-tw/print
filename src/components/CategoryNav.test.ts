@@ -30,6 +30,8 @@ describe("CategoryNav", () => {
     const currentLink = html.match(/<a\b[^>]*aria-current="page"[^>]*>/)?.[0];
     expect(currentLink).toBeDefined();
     expect(currentLink).toContain('href="/en/posts/categories/css/"');
+    // The selection brackets are decorative, so the accessible name stays plain.
+    expect(currentLink).toContain('aria-label="CSS"');
   });
 
   it("marks nothing as current when no category is active", async () => {

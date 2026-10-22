@@ -25,7 +25,8 @@ const translatePath = useTranslatedPath(lang);
       <a
         href={`${translatePath(`${basePath}/${slugify(name)}`)}/`}
         aria-current={name === active ? "page" : undefined}
-        class={name === active ? "text-accent" : undefined}
+        aria-label={name === active ? name : undefined}
+        class={name === active ? "tui-active text-accent" : undefined}
       >
         {name}
       </a>

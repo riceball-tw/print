@@ -25,9 +25,10 @@ const { navigation, path = "/" } = Astro.props;
 				<a
 					class:list={[
 						"transition-colors hover:text-accent",
-						isActive ? "text-accent" : undefined,
+						isActive ? "tui-active text-accent" : undefined,
 					]}
 					aria-current={isActive ? "page" : undefined}
+					aria-label={isActive ? item.name : undefined}
 					href={item.url}
 				>
 					{item.name}
