@@ -10,6 +10,7 @@ Start writing [posts](https://riceball-tw.github.io/print/en/posts/) or [shortpo
 - **Two content types** — long-form `post`s and feed-style `shortpost`s, each with its own index, detail page, and category pages
 - **Built-in i18n** — English, 简体中文, and 繁體中文, each served from its own subpath (`/en/`, `/zh-cn/`, `/zh-tw/`); translation keys are type-checked
 - **Typed content** — MDX/Markdown front matter validated with Zod, so a missing `headline` fails the build instead of the page
+- **Expressive code blocks** — syntax highlighting, editor and terminal frames, line markers, and a copy button on every fenced block, themed by the site's light/dark toggle
 - **TUI aesthetic** — a blinking cursor in the wordmark, `[bracketed]` active navigation items, monospace metadata, hairline rules
 - **Light & dark themes** — one toggle, persisted in `localStorage`, applied before first paint so there is no flash
 - **Responsive** — a fixed top bar on small screens, a fixed side rail on large ones
@@ -74,13 +75,15 @@ All commands run from the root of the project:
 
 4. `src/styles/global.css`: the palette, typography, and layout tokens, plus the base and component styles
 
-5. `public`: static assets served as-is (favicon, images, and anything else you drop in)
+5. `ec.config.mjs`: Expressive Code themes and style overrides, auto-loaded from the project root. A demo post lives at `/en/posts/expressive-code-demo/`
 
-6. `src/utils`: the small pure helpers the pages are built from (dates, slugs, navigation, previews, grids, theme)
+6. `public`: static assets served as-is (favicon, images, and anything else you drop in)
 
-7. `astro.config.mjs`: Astro configuration, including the deployment base path
+7. `src/utils`: the small pure helpers the pages are built from (dates, slugs, navigation, previews, grids, theme)
 
-8. `.github/workflows`: the CI and GitHub Pages deployment pipelines
+8. `astro.config.mjs`: Astro configuration, including the deployment base path
+
+9. `.github/workflows`: the CI and GitHub Pages deployment pipelines
 
 ### Writing content
 
@@ -146,6 +149,7 @@ pnpm test:e2e   # browser tests, including the sub-path deployment suite
 │   ├── styles/          # global.css — tokens, base styles, components
 │   └── utils/           # pure helpers (dates, slugs, navigation, …)
 ├── astro.config.mjs
+├── ec.config.mjs
 ├── playwright.config.ts
 └── vitest.config.ts
 ```

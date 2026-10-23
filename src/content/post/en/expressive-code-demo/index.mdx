@@ -1,0 +1,107 @@
+---
+isDraft: false
+subHeadline: "Highlight lines, show a diff, and give a snippet a frame — without leaving Markdown."
+headline: "Expressive Code: code blocks that explain themselves"
+excerpt: "Expressive Code replaces the plain code block with a theme-aware frame, a copy button, and annotations that point at the line that matters. This post is a tour of what a fenced block can do."
+category: "Example"
+publishDate: 2026-10-23
+---
+
+## Introduction
+
+Expressive Code replaces the plain code block with a small, accessible document: a frame that follows the site theme, a copy button, and annotations that point at the line that matters.
+
+Every fenced block below is ordinary Markdown. The only extra work is the text after the language name, called the meta string.
+
+## Highlighting
+
+Marked lines are tinted. Inserted and deleted lines get their own glyphs and colours, so a diff reads as a change rather than a wall of text. Ranges accept line numbers, words, or regular expressions.
+
+```ts title="src/lib/retry.ts" wrap {4-6} del={10} ins={11}
+export async function retry<T>(task: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await task();
+    } catch (error) {
+      lastError = error;
+      if (attempt === attempts) break;
+      await sleep(100);
+      await sleep(2 ** attempt * 100);
+    }
+  }
+
+  throw lastError;
+}
+```
+
+## Frames
+
+Editor frames carry a filename; terminal frames carry a command and a prompt. Both are theme-aware and both keep the copy button in the top-right corner.
+
+```bash frame="terminal" title="pnpm test"
+pnpm test -- --run
+
+ ✓ src/utils/slug.test.ts (4 tests)
+ ✓ src/utils/base.test.ts (3 tests)
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+```
+
+## Inline markers
+
+Markers also accept plain text or a regular expression, so a single identifier can stand out without tinting the whole row. The same syntax covers mark, ins and del.
+
+```ts title="src/middleware.ts" mark="session"
+const session = await auth.verify(request.headers.get("authorization"));
+
+if (!session) {
+  return new Response("Unauthorized", { status: 401 });
+}
+
+return next();
+```
+
+## Wrapping
+
+Add `wrap` to the meta string when a line is longer than the column. Wrapped lines keep their indentation, which matters for languages where the column is part of the syntax.
+
+```css title="src/styles/grid.css" wrap
+/* A long declaration is a good excuse to wrap. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  grid-template-areas: "header header header" "sidebar main aside" "footer footer footer";
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: start;
+}
+```
+
+## Setup
+
+The integration detects the Markdown processor, including Sätteri, and hooks into it directly. The options live in `ec.config.mjs` so the `<Code>` component can load them too.
+
+The options below pick the light or dark theme from the same `data-theme` attribute the rest of the site uses, then reuse the paper, ink and hairline tokens.
+
+```js title="ec.config.mjs"
+import { defineEcConfig } from "astro-expressive-code";
+
+export default defineEcConfig({
+  themes: ["github-light", "github-dark"],
+  customizeTheme: (theme) => {
+    theme.name = theme.type;
+  },
+  useDarkModeMediaQuery: false,
+  styleOverrides: {
+    borderRadius: "0",
+    borderColor: "var(--color-line)",
+    codeBackground: "var(--color-paper)",
+  },
+});
+```
+
+## Closing
+
+Keep examples short enough to read in one sitting, and let the annotations do the pointing. A code block that explains itself is one less paragraph you have to write.
