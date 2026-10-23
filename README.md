@@ -119,7 +119,9 @@ Draft posts (`isDraft: true`, the default) are visible in development and exclud
 
 The site is deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
 
-A GitHub Pages **project** site is served from a sub-path (`https://<owner>.github.io/<repo>/`), so set a repository variable named `PUBLIC_BASE_URL` to the repository name (`print`). For a site served from the domain root — a custom domain, Cloudflare Pages, Netlify — leave it empty. Every generated link goes through the base path, so one build is correct in both cases.
+A GitHub Pages **project** site is served from a sub-path (`https://<owner>.github.io/<repo>/`), so set a repository variable named `PUBLIC_BASE_URL` to the repository name (`print`). For a site served from the domain root — a custom domain, Cloudflare Pages, Netlify — leave it empty (or set it to the full deployment URL, e.g. a custom domain). Every generated link goes through the base path, so one build is correct in both cases.
+
+The deploy workflow resolves that into the absolute deployment URL (`PUBLIC_SITE_URL`) used by the generated `sitemap-index.xml` and `robots.txt`: a full URL in `PUBLIC_BASE_URL` counts as the URL; otherwise the GitHub Pages project-site convention derives it from the repository. Set a `PUBLIC_SITE_URL` repository variable to override at build time. Locally and in tests neither variable is set, so the builds skip sitemap generation.
 
 See [`src/utils/base.ts`](src/utils/base.ts) for how the base path is resolved and applied.
 

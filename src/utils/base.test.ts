@@ -16,7 +16,7 @@ describe("resolveBase", () => {
   });
 
   it("accepts a full deployment URL and keeps only its path", () => {
-    expect(resolveBase("https://riceball-tw.github.io/print")).toBe("/print/");
+    expect(resolveBase("https://example.com/print")).toBe("/print/");
     expect(resolveBase("https://example.com/")).toBe("/");
   });
 

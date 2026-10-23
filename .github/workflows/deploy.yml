@@ -39,6 +39,22 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
 
+      # Resolves the absolute deployment URL the sitemap integration needs:
+      # a `PUBLIC_BASE_URL` variable that already is a full URL (custom domain)
+      # counts as the URL; a bare sub-path is the GitHub Pages project site
+      # (`https://<owner>.github.io/<repo>/`); an empty value is the domain root.
+      # src/utils/base.ts keeps the base path logic; this only feeds the
+      # sitemap and robots.txt, never page links.
+      - name: Resolve deployment URL
+        run: |
+          case "$PUBLIC_BASE_URL" in
+            http*) echo "PUBLIC_SITE_URL=$PUBLIC_BASE_URL" >> "$GITHUB_ENV" ;;
+            "") echo "PUBLIC_SITE_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io/" >> "$GITHUB_ENV" ;;
+            *) echo "PUBLIC_SITE_URL=https://${GITHUB_REPOSITORY_OWNER}.github.io/${PUBLIC_BASE_URL}/" >> "$GITHUB_ENV" ;;
+          esac
+        env:
+          PUBLIC_BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
+
       - name: Build
         run: pnpm build
         env:
@@ -48,6 +64,9 @@ jobs:
           # Leave it empty (or use a full URL such as a custom domain) for a
           # site served from the domain root. See src/utils/base.ts.
           PUBLIC_BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
+          # Absolute deployment URL, resolved above. Overridable for outsourced
+          # deployments (e.g. a custom domain built with exactly this host).
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
 
       # GitHub Pages serves exactly this artifact at the deployment base.
       - uses: actions/upload-pages-artifact@v5
