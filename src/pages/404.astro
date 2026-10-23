@@ -1,0 +1,108 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import {
+	languageTags,
+	languages,
+	defaultLang,
+	type LanguageKey,
+} from '@/i18n/ui';
+import { useTranslations } from '@/i18n/utils';
+import { withBase } from '@/utils/base';
+
+const config = await getEntry('config', 'site');
+if (!config) throw new Error('Missing "site" entry in the config collection.');
+
+const { brand } = config.data;
+const t = useTranslations(defaultLang);
+const homeUrl = withBase(`/${defaultLang}/`);
+const postsUrl = withBase(`/${defaultLang}/posts/`);
+const base = import.meta.env.BASE_URL;
+
+/*
+ * The static build emits a single `404.html` that every missing URL falls back
+ * to, so the shell is server-rendered in the default language. When the broken
+ * URL carries a language prefix (which the host preserves), the inline script
+ * below re-stamps the copy in that language and retargets the links.
+ */
+const copy = Object.fromEntries(
+	(Object.keys(languages) as LanguageKey[]).map((lang) => {
+		const localize = useTranslations(lang);
+		return [
+			lang,
+			{
+				kicker: localize('notfound.kicker'),
+				title: localize('notfound.title'),
+				body: localize('notfound.body'),
+				pathLabel: localize('notfound.pathLabel'),
+				backLabel: localize('common.back'),
+				postsLabel: `[ ${localize('nav.posts')} ]`,
+				home: withBase(`/${lang}/`),
+				posts: withBase(`/${lang}/posts/`),
+			},
+		];
+	}),
+);
+---
+
+<BaseLayout title={`${brand.name} · 404`} description={t('notfound.body')}>
+	<main class="px-4 pb-12 pt-6">
+		<div class="max-w-4xl">
+			<p class="label" data-404="kicker">{t('notfound.kicker')}</p>
+			<h1 class="mt-4 max-w-3xl text-4xl leading-[0.98] tracking-[-0.03em] sm:text-5xl md:text-6xl" data-404="title">
+				{t('notfound.title')}
+			</h1>
+			<p class="mt-8 max-w-2xl text-lg leading-relaxed text-muted md:text-xl" data-404="body">
+				{t('notfound.body')}
+			</p>
+
+			{/*
+			 * The missing URL as a print-index entry: a dotted leader runs from the
+			 * mono label to the document name, exactly like PostItem's date row.
+			 */}
+			<section class="mt-12 border-t border-line pt-4">
+				<div class="flex items-baseline gap-3 font-mono text-xs">
+					<span class="label shrink-0" data-404="pathLabel">{t('notfound.pathLabel')}</span>
+					<span class="min-w-0 flex-1 border-b border-dotted border-ink/25" aria-hidden="true"></span>
+					<span class="min-w-0 break-all" data-404="path">—</span>
+				</div>
+			</section>
+
+			<hr class="mt-12" />
+			{/* TUI exit row: bracketed links, as the other pages sign off. */}
+			<p class="mt-3 flex flex-wrap gap-x-2 font-mono text-xs">
+				<a data-404="back" href={homeUrl}>{t('common.back')}</a>
+				<span aria-hidden="true">·</span>
+				<a data-404="posts" href={postsUrl}>[ {t('nav.posts')} ]</a>
+			</p>
+		</div>
+	</main>
+</BaseLayout>
+
+<script is:inline define:vars={{ copy, base, languageTags }}>
+	const prefix = base === '/' ? '' : base.replace(/\/+$/, '');
+	const segments = location.pathname.slice(prefix.length).split('/').filter(Boolean);
+	const lang = typeof segments[0] === 'string' && segments[0] in copy ? segments[0] : null;
+	if (lang && Object.hasOwn(languageTags, lang)) {
+		const strings = copy[lang];
+		for (const el of document.querySelectorAll('[data-404]')) {
+			const key = el.getAttribute('data-404');
+			switch (key) {
+				case 'back':
+					el.href = strings.home;
+					el.textContent = strings.backLabel;
+					break;
+				case 'posts':
+					el.href = strings.posts;
+					el.textContent = strings.postsLabel;
+					break;
+				case 'path':
+					el.textContent = location.pathname;
+					break;
+				default:
+					el.textContent = strings[key];
+			}
+		}
+		document.documentElement.lang = languageTags[lang];
+	}
+</script>
