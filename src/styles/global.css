@@ -310,4 +310,51 @@ html[data-theme="dark"] {
   .prose hr {
     margin: 2.5em 0;
   }
+
+  /*
+   * Diagrams rendered at build time by Pele (src/components/Mermaid.astro).
+   * The SVG carries its own --pele-* variables, so mapping them to the site
+   * palette here is enough: switching data-theme recolours the diagram
+   * without a re-render.
+   */
+  .prose .mermaid-figure {
+    margin: 2em 0;
+  }
+
+  .prose .mermaid {
+    overflow-x: auto;
+  }
+
+  .prose .pele {
+    --pele-bg: var(--color-paper);
+    --pele-fg: var(--color-ink);
+    --pele-muted: var(--color-muted);
+    --pele-line: var(--color-ink);
+    --pele-surface: color-mix(in srgb, var(--color-ink) 4%, var(--color-paper));
+    --pele-surface-alt: color-mix(in srgb, var(--color-ink) 8%, var(--color-paper));
+    --pele-border: var(--color-line);
+    --pele-accent: var(--color-accent);
+    --pele-critical: var(--color-accent);
+    --pele-font: var(--font-sans);
+    --pele-font-mono: var(--font-mono);
+
+    /* Square corners sit better in the printed-technical layout. */
+    --pele-radius: 0;
+
+    /* Keep diagrams in the site's two-tone palette plus the vermilion accent. */
+    --pele-series-1: var(--color-accent);
+    --pele-series-2: var(--color-ink);
+    --pele-series-3: color-mix(in srgb, var(--color-ink) 65%, var(--color-paper));
+    --pele-series-4: color-mix(in srgb, var(--color-accent) 65%, var(--color-paper));
+    --pele-series-5: color-mix(in srgb, var(--color-ink) 40%, var(--color-paper));
+    --pele-series-6: color-mix(in srgb, var(--color-accent) 40%, var(--color-paper));
+    --pele-series-7: color-mix(in srgb, var(--color-ink) 85%, var(--color-paper));
+    --pele-series-8: color-mix(in srgb, var(--color-accent) 85%, var(--color-paper));
+  }
+
+  @media print {
+    .prose .mermaid-figure {
+      break-inside: avoid;
+    }
+  }
 }

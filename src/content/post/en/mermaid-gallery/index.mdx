@@ -1,0 +1,568 @@
+---
+isDraft: false
+headline: "A Mermaid diagram gallery"
+subHeadline: "Every diagram type Pele renders, from flowcharts to Wardley maps."
+excerpt: "A visual tour of the Mermaid syntax this site supports, all rendered to static SVG at build time and themed with the same CSS variables as the rest of the page."
+category: "Example"
+publishDate: 2026-10-23
+---
+
+Every diagram below is written as a plain fenced code block in this MDX file. A
+Sätteri plugin turns the fence into a component, Pele renders it to SVG during
+`astro build`, and the result is inlined into the HTML. There is no client-side
+JavaScript, and the colors come from the same CSS variables that flip when you
+switch to dark mode.
+
+<p class="label">Core</p>
+
+- [Flowchart](#flowchart)
+- [Swimlane](#swimlane)
+- [Sequence](#sequence)
+- [Class](#class)
+- [State](#state)
+- [Entity relationship](#entity-relationship-er)
+- [Use case](#use-case)
+
+<p class="label">Planning</p>
+
+- [Gantt](#gantt)
+- [Timeline](#timeline)
+- [User journey](#user-journey)
+- [Kanban](#kanban)
+- [Quadrant chart](#quadrant-chart)
+
+<p class="label">Data and charts</p>
+
+- [Pie chart](#pie-chart)
+- [XY chart](#xy-chart)
+- [Radar](#radar)
+- [Treemap](#treemap)
+- [Sankey](#sankey)
+- [Packet](#packet)
+
+<p class="label">Structure</p>
+
+- [Mindmap](#mindmap)
+- [Tree view](#tree-view)
+- [Block](#block)
+- [Architecture](#architecture)
+- [C4](#c4)
+- [Requirement](#requirement)
+- [Venn](#venn)
+
+<p class="label">Specialised</p>
+
+- [Git graph](#git-graph)
+- [Event modeling](#event-modeling)
+- [Cynefin](#cynefin)
+- [Wardley map](#wardley-map)
+- [Ishikawa](#ishikawa)
+- [Railroad](#railroad)
+- [Agentflow](#agentflow)
+- [Info](#info)
+
+## Flowchart
+
+The pipeline this post goes through.
+
+```mermaid Build pipeline
+flowchart LR
+  MDX[MDX post] --> P[Sätteri plugin]
+  P --> M[Mermaid component]
+  M --> S[Pele SVG]
+  S --> HTML[Static HTML]
+```
+
+## Swimlane
+
+The same build, split by who owns each step.
+
+```mermaid
+swimlane-beta LR
+  subgraph Writer
+    write[Write a post]
+    review[Review preview]
+  end
+  subgraph Astro
+    build[Build site]
+    valid{Diagram valid?}
+  end
+  write --> build --> valid
+  valid -->|yes| review
+  valid -->|no| write
+```
+
+## Sequence
+
+A request for one diagram, from editor to browser.
+
+```mermaid
+sequenceDiagram
+  participant W as Writer
+  participant A as Astro
+  participant P as Pele
+  W->>A: pnpm build
+  A->>P: render(source)
+  P-->>A: SVG
+  A-->>W: static HTML
+```
+
+## Class
+
+The two pieces of the component boundary.
+
+```mermaid
+classDiagram
+  class Post {
+    +String headline
+    +Date publishDate
+    +render()
+  }
+  class Mermaid {
+    +String chart
+    +String caption
+  }
+  Post *-- Mermaid : contains
+```
+
+## State
+
+The lifecycle of a post.
+
+```mermaid
+stateDiagram-v2
+  [*] --> Draft
+  Draft --> Review : submit
+  Review --> Published : approve
+  Review --> Draft : request changes
+  Published --> [*]
+```
+
+## Entity relationship (ER)
+
+The content collection, reduced to two tables.
+
+```mermaid
+erDiagram
+  POST ||--o{ DIAGRAM : contains
+  POST {
+    string id PK
+    string headline
+    date publishDate
+  }
+  DIAGRAM {
+    string id PK
+    string chart
+    string caption
+  }
+```
+
+## Use case
+
+What a writer and a reader can do.
+
+```mermaid
+usecase-beta
+direction LR
+actor Writer
+actor Reader
+Browse("Read a post")
+Publish("Publish a diagram")
+Writer --> Publish
+Reader --> Browse
+Publish ..> : include Browse
+```
+
+## Gantt
+
+A plausible two-week schedule for one post.
+
+```mermaid
+gantt
+  title Publishing a post
+  dateFormat YYYY-MM-DD
+  section Draft
+    Write       :a1, 2026-10-01, 5d
+    Review      :a2, after a1, 3d
+  section Publish
+    Build       :b1, after a2, 1d
+    Deploy      :b2, after b1, 1d
+```
+
+## Timeline
+
+How the rendering approach changed.
+
+```mermaid
+timeline
+  title Static diagrams
+  section Past
+    2020 : Client-side Mermaid
+  section Present
+    2026 : Build-time Pele
+```
+
+## User journey
+
+The experience of adding one diagram.
+
+```mermaid
+journey
+  title Publishing a diagram post
+  section Write
+    Add a fence: 5: Writer
+    Preview locally: 3: Writer
+  section Ship
+    Run the build: 4: Astro
+    Read the post: 5: Reader
+```
+
+## Kanban
+
+A small editorial board.
+
+```mermaid
+kanban
+  Backlog
+    [Write gallery]
+    [Check dark mode]
+  In progress
+    task1[Render diagrams]@{ assigned: 'kepano', priority: 'High' }
+  Done
+    [Wire plugin]
+```
+
+## Quadrant chart
+
+Where the heavier diagram types sit.
+
+```mermaid
+quadrantChart
+  title Diagram types by effort and payoff
+  x-axis Low effort --> High effort
+  y-axis Low payoff --> High payoff
+  quadrant-1 Worth it
+  quadrant-2 Quick wins
+  quadrant-3 Skip
+  quadrant-4 Reconsider
+  Flowchart: [0.2, 0.8]
+  Sequence: [0.3, 0.7]
+  C4: [0.8, 0.6]
+  Wardley: [0.9, 0.4]
+```
+
+## Pie chart
+
+A rough split of the gallery itself.
+
+```mermaid
+pie title Diagram types in this gallery
+  "Core" : 7
+  "Planning" : 5
+  "Data" : 6
+  "Structure" : 7
+  "Specialised" : 8
+```
+
+## XY chart
+
+Invented line counts, for the shape of the chart.
+
+```mermaid
+xychart
+  title "Lines per diagram"
+  x-axis [flowchart, sequence, class, state, ER, pie]
+  y-axis "Lines" 0 --> 30
+  bar [12, 10, 8, 9, 11, 4]
+  line [12, 10, 8, 9, 11, 4]
+```
+
+## Radar
+
+Pele against the reference implementation, on axes that matter here.
+
+```mermaid
+radar-beta
+  title Renderer comparison
+  axis speed["Speed"], theme["Theme"], size["Size"], js["No JS"]
+  curve pele["Pele"]{5, 5, 5, 5}
+  curve mermaid["Mermaid"]{3, 3, 2, 1}
+  max 5
+```
+
+## Treemap
+
+Where a build's time goes, roughly.
+
+```mermaid
+treemap-beta
+  "Build time"
+    "Astro": 40
+    "Pele": 35
+    "Content": 25
+```
+
+## Sankey
+
+Content flowing into output formats.
+
+```mermaid
+sankey
+
+Posts,Diagram pages,12
+Posts,Text only,30
+Diagram pages,Inline SVG,12
+```
+
+## Packet
+
+Not network traffic, but the same idea: fixed-width fields.
+
+```mermaid
+---
+config:
+  packet:
+    bitsPerRow: 16
+---
+packet
+0-7: "Version"
+8-15: "Flags"
+16-31: "Length"
+32-47: "Source"
+48-63: "Destination"
+```
+
+## Mindmap
+
+The stack, from content to presentation.
+
+```mermaid
+mindmap
+  root((Static blog))
+    Content
+      MDX
+      Mermaid
+    Build
+      Astro
+      Pele
+    Theme
+      Paper
+      Ink
+```
+
+## Tree view
+
+The files involved in this feature.
+
+```mermaid
+treeView-beta
+  src/
+    content/
+      post/
+        mermaid-gallery/
+          index.mdx
+    components/
+      Mermaid.astro
+    plugins/
+      mermaid.ts
+  package.json
+```
+
+## Block
+
+The pipeline again, as blocks rather than a graph.
+
+```mermaid
+block
+  columns 3
+  a["MDX"] b["Plugin"] c["SVG"]
+  a --> b
+  b --> c
+```
+
+## Architecture
+
+The build groups and the two services inside them.
+
+```mermaid
+architecture-beta
+  group build(cloud)[Build]
+    service astro(server)[Astro] in build
+    service pele(server)[Pele] in build
+  group output(disk)[Output]
+    service html(disk)[HTML] in output
+  astro:R --> L:pele
+  pele:R --> L:html
+```
+
+## C4
+
+The same system at the context level.
+
+```mermaid
+C4Context
+  title Blog build
+  Person(writer, "Writer", "Writes MDX posts")
+  System(astro, "Astro", "Builds the static site")
+  System(pele, "Pele", "Renders Mermaid to SVG")
+  Rel(writer, astro, "Runs pnpm build")
+  Rel(astro, pele, "Calls render()")
+```
+
+## Requirement
+
+One non-functional requirement, satisfied by the renderer.
+
+```mermaid
+requirementDiagram
+  requirement static_svg {
+    id: 1
+    text: Diagrams must be in the initial HTML.
+    risk: medium
+    verifymethod: test
+  }
+  element pele {
+    type: renderer
+  }
+  pele - satisfies -> static_svg
+```
+
+## Venn
+
+Three properties this approach shares.
+
+```mermaid
+venn-beta
+  title Static, themeable, fast
+  set Static
+  set Themeable
+  set Fast
+  union Static,Themeable["No client JS"]
+  union Themeable,Fast["Cheap redraws"]
+  union Static,Fast["Cached builds"]
+  union Static,Themeable,Fast["Pele"]
+```
+
+## Git graph
+
+A short feature branch, as one does.
+
+```mermaid
+gitGraph
+  commit id: "init"
+  branch post
+  commit id: "draft"
+  checkout main
+  commit id: "theme"
+  checkout post
+  commit id: "mermaid"
+  checkout main
+  merge post id: "merge"
+```
+
+## Event modeling
+
+The same build as events rather than calls.
+
+```mermaid
+eventmodeling
+
+timeframe 01 ui PostEditor
+timeframe 02 command Publish
+timeframe 03 event PostPublished
+timeframe 04 processor BuildSite
+timeframe 05 event SiteDeployed
+```
+
+## Cynefin
+
+A deliberately loose classification of diagram choices.
+
+```mermaid
+cynefin-beta
+  title Where diagrams fit
+  clear
+    "Flowcharts"
+  complicated
+    "Architecture"
+  complex
+    "Wardley maps"
+  chaotic
+    "Incident sketches"
+```
+
+## Wardley map
+
+The pieces of this site, positioned by visibility and maturity.
+
+```mermaid
+wardley-beta
+  title Blog stack
+  anchor Reader [0.95, 0.60]
+  component Astro [0.60, 0.55]
+  component Pele [0.45, 0.40]
+  component Mermaid syntax [0.30, 0.70]
+  Reader -> Astro
+  Astro -> Pele
+  Pele -> Mermaid syntax
+```
+
+## Ishikawa
+
+Causes of a slow build, grouped the usual way.
+
+```mermaid
+ishikawa-beta
+  Slow build
+  Content
+    Too many diagrams
+    Large MDX files
+  Renderer
+    Heavy layout
+    Missing cache
+  Tooling
+    No incremental build
+    Slow CI
+```
+
+## Railroad
+
+The tiniest grammar for a diagram fence.
+
+```mermaid
+railroad-ebnf-beta
+title Pipeline grammar
+
+pipeline = fence ;
+fence = "fence-open" source "fence-close" ;
+source = { character } ;
+```
+
+## Agentflow
+
+A beta flow syntax for agent-style pipelines.
+
+```mermaid
+agentflow-beta TB
+  flow intake["Intake"]
+    receive["Read fence"]@{ shape: input }
+  end
+  flow render["Render"]
+    parse["Parse"]@{ shape: task }
+    draw["Draw SVG"]@{ shape: task }
+    parse --> draw
+  end
+  receive --> parse
+```
+
+## Info
+
+The smallest supported diagram: renderer information.
+
+```mermaid
+info
+```
+
+External Mermaid plugins such as ZenUML are not supported by Pele. See its
+[compatibility notes](https://pele.run/compatibility) for the full list and the
+differences from the reference implementation.
