@@ -34,6 +34,33 @@ describe("LanguagePicker", () => {
     expect(html).not.toContain('href="/en/posts"');
   });
 
+  it("strikes through languages that have no version of the page", async () => {
+    // `mermaid-gallery` is only written in English, so the other languages
+    // have no counterpart to link to.
+    const html = await renderPicker({
+      lang: "en",
+      path: "/posts/mermaid-gallery/",
+      label: "Please select language",
+    });
+
+    expect(html).not.toContain('href="/zh-cn/posts/mermaid-gallery/"');
+    expect(html).not.toContain('href="/zh-tw/posts/mermaid-gallery/"');
+    expect(html.match(/line-through/g)).toHaveLength(2);
+    expect(html).toContain("Not available in this language");
+  });
+
+  it("keeps linking languages that do have the page", async () => {
+    const html = await renderPicker({
+      lang: "en",
+      path: "/shortposts/demo-short-post/",
+      label: "Please select language",
+    });
+
+    expect(html).toContain('href="/zh-cn/shortposts/demo-short-post/"');
+    expect(html).toContain('href="/zh-tw/shortposts/demo-short-post/"');
+    expect(html).not.toContain("line-through");
+  });
+
   it("labels the navigation landmark for screen readers", async () => {
     const html = await renderPicker({ lang: "zh-tw", path: "/", label: "請選擇語言" });
 

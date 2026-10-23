@@ -1,6 +1,7 @@
 ---
 import { languages, languageShortNames, type LanguageKey } from '@/i18n/ui';
-import { useTranslatedPath } from '@/i18n/utils';
+import { useTranslatedPath, useTranslations } from '@/i18n/utils';
+import { hasTranslation } from '@/utils/translations';
 
 interface Props {
 	/** The language the current page is rendered in. */
@@ -13,12 +14,17 @@ interface Props {
 
 const { lang, path, label } = Astro.props;
 const translatePath = useTranslatedPath(lang);
+const t = useTranslations(lang);
 ---
 
 {/*
 	One list, two shapes: a compact inline run of short names in the small-screen
 	top bar, and a vertical list of full names at the bottom of the sidebar. The
 	short label is hidden from `md` up, and vice versa.
+
+	A language is struck through when this page has no counterpart in it, e.g.
+	an untranslated post. It stays visible so the gap is obvious, but it is not
+	a link: following it would only lead to a 404.
 */}
 <nav
 	class="label flex flex-wrap items-center gap-x-1 gap-y-1 md:flex-col md:items-start md:gap-y-2"
@@ -33,11 +39,20 @@ const translatePath = useTranslatedPath(lang);
 						<span class="md:hidden">{languageShortNames[key as LanguageKey]}</span>
 						<span class="hidden md:inline">{name}</span>
 					</span>
-				) : (
+				) : hasTranslation(path, key as LanguageKey) ? (
 					<a href={translatePath(path, key as LanguageKey)} aria-label={name}>
 						<span class="md:hidden">{languageShortNames[key as LanguageKey]}</span>
 						<span class="hidden md:inline">{name}</span>
 					</a>
+				) : (
+					<span
+						class="cursor-not-allowed text-muted line-through decoration-1"
+						title={t('language.unavailable')}
+					>
+						<span class="md:hidden">{languageShortNames[key as LanguageKey]}</span>
+						<span class="hidden md:inline">{name}</span>
+						<span class="sr-only"> ({t('language.unavailable')})</span>
+					</span>
 				)}
 			</>
 		))
