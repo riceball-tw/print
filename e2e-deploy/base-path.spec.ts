@@ -57,8 +57,12 @@ test("following an internal link keeps the visitor inside the sub-path", async (
 test("switching language stays inside the sub-path", async ({ page }) => {
   await page.goto(`${BASE}/en/posts/categories/css/`);
 
-  await page
-    .getByRole("navigation", { name: "Please select language" })
+  const picker = page.getByRole("navigation", { name: "Please select language" });
+
+  // The language list is a popover — open it before clicking a link inside.
+  await picker.getByRole("button").click();
+
+  await picker
     .getByRole("link", { name: "繁體中文" })
     .click();
 
