@@ -17,10 +17,11 @@ interface Props {
 }
 
 const { shortpost, lang = 'en' } = Astro.props;
+const slug = getSlugFromId(shortpost.id);
 ---
 
 <li class="flex items-baseline gap-3 leading-snug">
-	<a class="min-w-0 truncate" href={withBase(`/${lang}/shortposts/${getSlugFromId(shortpost.id)}/`)}>
+	<a class="min-w-0 truncate" href={withBase(`/${lang}/shortposts/${slug}/#shortpost-${slug}`)}>
 		{shortpost.data.headline}
 	</a>
 	<span class="flex-1 border-b border-dotted border-ink/25" aria-hidden="true" />
