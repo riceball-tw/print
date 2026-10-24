@@ -37,7 +37,7 @@ const homeUrl = translatePath('/');
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+		<link id="site-favicon" rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 		<link rel="icon" href={withBase('/favicon.ico')} />
 		<link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 		<title>{title}</title>
@@ -89,7 +89,10 @@ const homeUrl = translatePath('/');
 			/>
 		</div>
 		<script>
+			import { startFaviconBlink } from '@/utils/favicon';
 			import { getTheme, themeStorageKey, toggleTheme } from '@/utils/theme';
+
+			startFaviconBlink();
 
 			const toggle = document.querySelector<HTMLButtonElement>('[data-test="theme-toggle"]');
 
