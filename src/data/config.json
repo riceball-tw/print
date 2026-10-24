@@ -18,7 +18,8 @@
     "navigation": [
       {
         "translationKey": "nav.home",
-        "url": "/"
+        "url": "/",
+        "hideOnMobile": true
       },
       {
         "translationKey": "nav.posts",

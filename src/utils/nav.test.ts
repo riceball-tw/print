@@ -14,7 +14,7 @@ describe("buildNav", () => {
     const nav = buildNav(
       [
         { translationKey: "nav.home", url: "/" },
-        { translationKey: "nav.posts", url: "/posts" },
+        { translationKey: "nav.posts", url: "/posts", hideOnMobile: true },
       ],
       t,
       translatePath,
@@ -22,7 +22,7 @@ describe("buildNav", () => {
 
     expect(nav).toEqual([
       { name: "Home", url: "/en/", path: "/" },
-      { name: "Posts", url: "/en/posts", path: "/posts" },
+        { name: "Posts", url: "/en/posts", path: "/posts", hideOnMobile: true },
     ]);
   });
 

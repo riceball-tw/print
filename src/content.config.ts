@@ -25,6 +25,8 @@ const postSchema = z.object({
 const navigationItemSchema = z.object({
   translationKey: z.string(),
   url: z.string(),
+  /** Hide this item below the desktop (`md`) breakpoint. */
+  hideOnMobile: z.boolean().optional(),
 });
 
 const shortpostSchema = z.object({

@@ -6,12 +6,15 @@ export interface NavItem {
   url: string;
   /** Language-relative path used to detect the active item, e.g. `/posts`. */
   path: string;
+  /** Whether this item is hidden below the desktop (`md`) breakpoint. */
+  hideOnMobile?: boolean;
 }
 
 /** A navigation entry as stored in the site config. */
 export interface NavigationEntry {
   translationKey: string;
   url: string;
+  hideOnMobile?: boolean;
 }
 
 /** Collapse a path to a comparable form: no trailing slash except the root. */
@@ -45,4 +48,5 @@ export const buildNav = (
     name: t(item.translationKey as TranslationKey),
     url: translatePath(item.url),
     path: normalizePath(item.url),
+    ...(item.hideOnMobile ? { hideOnMobile: true } : {}),
   }));

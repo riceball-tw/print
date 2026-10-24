@@ -6,6 +6,7 @@ interface Props {
 		name: string;
 		url: string;
 		path: string;
+		hideOnMobile?: boolean;
 	}[];
 	/** Current page path without its language prefix, e.g. `/posts`. */
 	path?: string;
@@ -25,6 +26,7 @@ const { navigation, path = "/" } = Astro.props;
 				<a
 					class:list={[
 						"transition-colors hover:text-accent",
+						item.hideOnMobile ? "hidden md:inline" : undefined,
 						isActive ? "tui-active text-accent" : undefined,
 					]}
 					aria-current={isActive ? "page" : undefined}

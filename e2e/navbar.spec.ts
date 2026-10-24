@@ -41,3 +41,12 @@ test("every page shows the navbar with the site logo linking home", async ({ pag
     await expect(navbar.getByRole("navigation")).toBeVisible();
   }
 });
+
+test("hides navigation items flagged for mobile viewports", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("/en/");
+
+  const nav = page.getByTestId("navbar").getByRole("navigation");
+  await expect(nav.getByRole("link", { name: t("nav.home"), exact: true })).not.toBeVisible();
+  await expect(nav.getByRole("link", { name: t("nav.posts"), exact: true })).toBeVisible();
+});
