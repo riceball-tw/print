@@ -21,7 +21,7 @@ test("home page renders through the base layout", async ({ page }) => {
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    "A minimal Astro site.",
+    "A minimal, TUI-inspired blog theme powered by Astro v7",
   );
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Print");
 });

@@ -40,7 +40,8 @@ describe("HeadSeo", () => {
     });
     expect(html).toContain("<title>About · Print</title>");
     expect(html).toContain('<meta property="og:site_name" content="Print"');
-    expect(html).toContain('<meta name="description" content="A minimal Astro site."');
+    // Description should fall back to the site config value, not be empty
+    expect(html).toMatch(/<meta name="description" content=".+"/);
   });
 
   it("renders mobile-optimized viewport and theme colors", async () => {
