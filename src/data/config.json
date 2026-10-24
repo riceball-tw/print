@@ -2,16 +2,12 @@
   "site": {
     "brand": {
       "name": "Print",
-      "description": "A minimal Astro site.",
+      "description": "A minimal, TUI-inspired blog theme powered by Astro v7",
       "copyright": "© 2026 Print",
       "socials": [
         {
           "name": "GitHub",
-          "url": "https://github.com/withastro"
-        },
-        {
-          "name": "X",
-          "url": "https://x.com/astrodotbuild"
+          "url": "https://github.com/riceball-tw/print"
         }
       ]
     },
