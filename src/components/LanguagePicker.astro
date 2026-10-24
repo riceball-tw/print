@@ -38,7 +38,7 @@ const menuId = 'language-picker-menu';
 	>
 		<span aria-hidden="true">[{languageShortNames[lang]}]</span>
 	</button>
-	<ul id={menuId} class="language-menu" popover open data-language-menu>
+	<ul id={menuId} class="language-menu" popover data-language-menu>
 		{
 			Object.entries(languages).map(([key, name]) => (
 				<li>
