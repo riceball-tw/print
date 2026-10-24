@@ -70,7 +70,7 @@ describe("HeadSeo", () => {
     expect(html).toContain('<link rel="alternate" hreflang="zh-Hant-TW"');
   });
 
-  it("renders OpenGraph and Twitter card metadata", async () => {
+  it("renders OpenGraph and Twitter card metadata with default og image", async () => {
     const html = await renderHeadSeo({
       ...defaultProps,
       type: "article",
@@ -80,7 +80,11 @@ describe("HeadSeo", () => {
     expect(html).toContain('<meta property="og:locale" content="en"');
     expect(html).toContain('<meta property="og:locale:alternate" content="zh-Hans"');
     expect(html).toContain('<meta property="og:locale:alternate" content="zh-Hant-TW"');
-    expect(html).toContain('<meta name="twitter:card" content="summary"');
+    expect(html).toContain('<meta property="og:image" content="http://localhost:4321/og.jpg"');
+    expect(html).toContain('<meta property="og:image:width" content="1200"');
+    expect(html).toContain('<meta property="og:image:height" content="630"');
+    expect(html).toContain('<meta name="twitter:card" content="summary_large_image"');
+    expect(html).toContain('<meta name="twitter:image" content="http://localhost:4321/og.jpg"');
   });
 
   it("renders image metadata when image prop is provided", async () => {

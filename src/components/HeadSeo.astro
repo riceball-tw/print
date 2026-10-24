@@ -54,9 +54,21 @@ const pageDescription = resolvedSiteDescription;
 const siteUrl = Astro.site ?? Astro.url;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 
-const imageUrl = image?.src
-  ? new URL(withBase(image.src), siteUrl).toString()
-  : undefined;
+const defaultImage = {
+  src: "/og.jpg",
+  alt: resolvedSiteName,
+  width: 1200,
+  height: 630,
+};
+
+const resolvedImage = {
+  src: image?.src ?? defaultImage.src,
+  alt: image?.alt ?? defaultImage.alt,
+  width: image?.width ?? defaultImage.width,
+  height: image?.height ?? defaultImage.height,
+};
+
+const imageUrl = new URL(withBase(resolvedImage.src), siteUrl).toString();
 ---
 
 <meta charset="utf-8" />
@@ -107,14 +119,14 @@ const imageUrl = image?.src
   .map((locale) => (
     <meta property="og:locale:alternate" content={languageTags[locale]} />
   ))}
-{imageUrl && <meta property="og:image" content={imageUrl} />}
-{imageUrl && image?.alt && <meta property="og:image:alt" content={image.alt} />}
-{imageUrl && image?.width && <meta property="og:image:width" content={String(image.width)} />}
-{imageUrl && image?.height && <meta property="og:image:height" content={String(image.height)} />}
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content={resolvedImage.alt} />
+<meta property="og:image:width" content={String(resolvedImage.width)} />
+<meta property="og:image:height" content={String(resolvedImage.height)} />
 
 <!-- Twitter -->
-<meta name="twitter:card" content={imageUrl ? "summary_large_image" : "summary"} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={pageDescription} />
-{imageUrl && <meta name="twitter:image" content={imageUrl} />}
-{imageUrl && image?.alt && <meta name="twitter:image:alt" content={image.alt} />}
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={resolvedImage.alt} />
