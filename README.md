@@ -1,6 +1,8 @@
-# [Print](https://riceball-tw.github.io/print/en/)
+# Print
 
-> A minimal, TUI-inspired blog theme powered by Astro v7
+> A minimal, TUI-inspired blog theme powered by Astro v7 - [demo](https://riceball-tw.github.io/print/en/)
+
+![test](./public/demo.jpg)
 
 ## Features
 
@@ -21,27 +23,27 @@ pnpm run dev        # http://localhost:4321
 
 ### Commands
 
-| Command                | Action                                                        |
-| :--------------------- | :------------------------------------------------------------ |
-| `pnpm dev`             | Starts the dev server at `localhost:4321`                     |
-| `pnpm build`           | Builds the production site into `./dist/`                     |
-| `pnpm preview`         | Previews the production build locally                         |
-| `pnpm test`            | Runs the Vitest unit tests                                    |
-| `pnpm test:e2e`        | Builds the site and runs the Playwright suites                |
-| `pnpm typecheck`       | Runs `astro check`                                            |
-| `pnpm lint`            | Runs oxlint                                                   |
-| `pnpm fmt`             | Formats the source with oxfmt                                 |
+| Command          | Action                                         |
+| :--------------- | :--------------------------------------------- |
+| `pnpm dev`       | Starts the dev server at `localhost:4321`      |
+| `pnpm build`     | Builds the production site into `./dist/`      |
+| `pnpm preview`   | Previews the production build locally          |
+| `pnpm test`      | Runs the Vitest unit tests                     |
+| `pnpm test:e2e`  | Builds the site and runs the Playwright suites |
+| `pnpm typecheck` | Runs `astro check`                             |
+| `pnpm lint`      | Runs oxlint                                    |
+| `pnpm fmt`       | Formats the source with oxfmt                  |
 
 ### Customization
 
-| What | Where |
-| :--- | :--- |
-| Site config (brand, nav, social links) | `src/data/config.json` |
-| Posts & notes | `src/content/post`, `src/content/note` |
-| Translations | `src/i18n/ui.ts` |
-| Styles & tokens | `src/styles/global.css` |
-| Expressive Code themes | `ec.config.mjs` |
-| Deployment base path | `astro.config.mjs` |
+| What                                   | Where                                  |
+| :------------------------------------- | :------------------------------------- |
+| Site config (brand, nav, social links) | `src/data/config.json`                 |
+| Posts & notes                          | `src/content/post`, `src/content/note` |
+| Translations                           | `src/i18n/ui.ts`                       |
+| Styles & tokens                        | `src/styles/global.css`                |
+| Expressive Code themes                 | `ec.config.mjs`                        |
+| Deployment base path                   | `astro.config.mjs`                     |
 
 ### Writing Content
 
@@ -63,9 +65,9 @@ Draft posts (`isDraft: true`, the default) are visible in development and exclud
 
 `.github/workflows/deploy.yml` supports two targets that run in parallel after the build:
 
-| Target | Setup |
-| :--- | :--- |
-| **GitHub Pages** | Set repo variable `PUBLIC_BASE_URL` to the repo name (e.g. `print`) |
+| Target               | Setup                                                                                                 |
+| :------------------- | :---------------------------------------------------------------------------------------------------- |
+| **GitHub Pages**     | Set repo variable `PUBLIC_BASE_URL` to the repo name (e.g. `print`)                                   |
 | **Cloudflare Pages** | Uncomment the `deploy-cloudflare` job; add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets |
 
 For a custom domain or Cloudflare, leave `PUBLIC_BASE_URL` empty or set it to the full URL.
