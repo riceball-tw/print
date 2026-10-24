@@ -16,7 +16,7 @@ Start writing [posts](https://riceball-tw.github.io/print/en/posts/) or [notes](
 - **Responsive** — a fixed top bar on small screens, a fixed side rail on large ones
 - **Deploy-anywhere** — a configurable base path means the same build works at a domain root or under a GitHub Pages sub-path
 - **Tested** — Vitest unit tests next to the code, Playwright end-to-end tests for what a reader actually does
-- **CI/CD** — type checking, linting, tests, and GitHub Pages deployment on every push
+- **CI/CD** — type checking, linting, tests, and deployment on every push to `main` via [Cloudflare Pages](https://pages.cloudflare.com/) or [GitHub Pages](https://pages.github.com/)
 
 ## Getting Started
 
@@ -117,13 +117,31 @@ Draft posts (`isDraft: true`, the default) are visible in development and exclud
 
 ### Deployment
 
-The site is deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`.
+`.github/workflows/deploy.yml` runs on every push to `main` and supports **two deployment targets** that run in parallel after the build:
 
-A GitHub Pages **project** site is served from a sub-path (`https://<owner>.github.io/<repo>/`), so set a repository variable named `PUBLIC_BASE_URL` to the repository name (`print`). For a site served from the domain root — a custom domain, Cloudflare Pages, Netlify — leave it empty (or set it to the full deployment URL, e.g. a custom domain). Every generated link goes through the base path, so one build is correct in both cases.
+| Target | What you need |
+| :--- | :--- |
+| **GitHub Pages** | Enable Pages in repo Settings; set `PUBLIC_BASE_URL` to the repo name (e.g. `print`) |
+| **Cloudflare Pages** | Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets |
 
-The deploy workflow resolves that into the absolute deployment URL (`PUBLIC_SITE_URL`) used by the generated `sitemap-index.xml` and `robots.txt`: a full URL in `PUBLIC_BASE_URL` counts as the URL; otherwise the GitHub Pages project-site convention derives it from the repository. Set a `PUBLIC_SITE_URL` repository variable to override at build time. Locally and in tests neither variable is set, so the builds skip sitemap generation.
+#### GitHub Pages
+
+A GitHub Pages **project** site is served from a sub-path (`https://<owner>.github.io/<repo>/`), so set a repository variable named `PUBLIC_BASE_URL` to the repository name (e.g. `print`). For a site at a domain root — a custom domain or Cloudflare Pages — leave it empty or set it to the full URL. Every generated link goes through the base path so one build works correctly in both cases.
+
+The workflow resolves `PUBLIC_BASE_URL` into an absolute `PUBLIC_SITE_URL` used by `sitemap-index.xml` and `robots.txt`. Set a `PUBLIC_SITE_URL` repository variable to override at build time. Locally and in tests neither variable is set, so the builds skip sitemap generation.
 
 See [`src/utils/base.ts`](src/utils/base.ts) for how the base path is resolved and applied.
+
+#### Cloudflare Pages
+
+Add the following two secrets to your repository (**Settings → Secrets and variables → Actions**):
+
+| Secret | Where to get it |
+| :--- | :--- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare Dashboard → My Profile → API Tokens (needs *Cloudflare Pages: Edit* permission) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Dashboard → right sidebar on any Pages or Workers page |
+
+Leave `PUBLIC_BASE_URL` empty (or set it to your custom domain) so the site resolves paths from the root.
 
 ### Testing
 
