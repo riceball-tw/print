@@ -64,9 +64,11 @@ jobs:
           # Leave it empty (or use a full URL such as a custom domain) for a
           # site served from the domain root. See src/utils/base.ts.
           PUBLIC_BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
-          # Absolute deployment URL, resolved above. Overridable for outsourced
-          # deployments (e.g. a custom domain built with exactly this host).
-          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          # Optional explicit sitemap host override. Keep this unset here:
+          # setting an empty repository variable would mask the PUBLIC_SITE_URL
+          # resolved in the previous step. The resolver already handles the
+          # GitHub Pages URL and custom domains configured via PUBLIC_BASE_URL.
+          # PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
 
       # GitHub Pages serves exactly this artifact at the deployment base.
       - uses: actions/upload-pages-artifact@v5
