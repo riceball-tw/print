@@ -120,7 +120,7 @@ describe("HeadSeo", () => {
   it("omits alternate links for languages that do not have a translation of the page", async () => {
     const html = await renderHeadSeo(
       defaultProps,
-      "http://localhost:4321/en/shortposts/use-the-bluetooth-cli-hard-drive-then-you-can-rebo-20/",
+      "http://localhost:4321/en/notes/use-the-bluetooth-cli-hard-drive-then-you-can-rebo-20/",
     );
     expect(html).not.toContain('hreflang="zh-Hant-TW"');
     expect(html).not.toContain('hreflang="zh-Hans"');

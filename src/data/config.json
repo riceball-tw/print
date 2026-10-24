@@ -26,8 +26,8 @@
         "url": "/posts"
       },
       {
-        "translationKey": "nav.shortposts",
-        "url": "/shortposts"
+        "translationKey": "nav.notes",
+        "url": "/notes"
       },
       {
         "translationKey": "nav.about",

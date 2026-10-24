@@ -52,12 +52,12 @@ describe("LanguagePicker", () => {
   it("keeps linking languages that do have the page", async () => {
     const html = await renderPicker({
       lang: "en",
-      path: "/shortposts/demo-short-post/",
+      path: "/notes/demo-note/",
       label: "Please select language",
     });
 
-    expect(html).toContain('href="/zh-cn/shortposts/demo-short-post/"');
-    expect(html).toContain('href="/zh-tw/shortposts/demo-short-post/"');
+    expect(html).toContain('href="/zh-cn/notes/demo-note/"');
+    expect(html).toContain('href="/zh-tw/notes/demo-note/"');
     expect(html).not.toContain("line-through");
   });
 

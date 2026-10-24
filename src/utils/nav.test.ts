@@ -43,7 +43,7 @@ describe("isPathActive", () => {
 
   it("ignores a sibling path that merely shares a prefix", () => {
     expect(isPathActive("/posts-archive", "/posts")).toBe(false);
-    expect(isPathActive("/shortposts", "/posts")).toBe(false);
+    expect(isPathActive("/notes", "/posts")).toBe(false);
   });
 
   it("marks the root active only on the root", () => {

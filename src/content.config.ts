@@ -29,7 +29,7 @@ const navigationItemSchema = z.object({
   hideOnMobile: z.boolean().optional(),
 });
 
-const shortpostSchema = z.object({
+const noteSchema = z.object({
   headline: z.string(),
   publishDate: z.date(),
   category: z.string().default("unsorted"),
@@ -73,12 +73,12 @@ export const collections = {
     }),
     schema: postSchema,
   }),
-  shortpost: defineCollection({
+  note: defineCollection({
     loader: glob({
       pattern: "**/*.{md,mdx}",
-      base: "./src/content/shortpost",
+      base: "./src/content/note",
       generateId: legacySlug,
     }),
-    schema: shortpostSchema,
+    schema: noteSchema,
   }),
 };

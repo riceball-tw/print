@@ -4,10 +4,10 @@
 
 ## Key Features
 
-Start writing [posts](https://riceball-tw.github.io/print/en/posts/) or [shortposts](https://riceball-tw.github.io/print/en/shortposts/) in typed Markdown or MDX. Everything on the site — navigation, categories, translations, colors — is configured from files you own.
+Start writing [posts](https://riceball-tw.github.io/print/en/posts/) or [notes](https://riceball-tw.github.io/print/en/notes/) in typed Markdown or MDX. Everything on the site — navigation, categories, translations, colors — is configured from files you own.
 
 - **Static by default** — a fully prerendered Astro site; JavaScript only where it earns its place
-- **Two content types** — long-form `post`s and feed-style `shortpost`s, each with its own index, detail page, and category pages
+- **Two content types** — long-form `post`s and feed-style `note`s, each with its own index, detail page, and category pages
 - **Built-in i18n** — English, 简体中文, and 繁體中文, each served from its own subpath (`/en/`, `/zh-cn/`, `/zh-tw/`); translation keys are type-checked
 - **Typed content** — MDX/Markdown front matter validated with Zod, so a missing `headline` fails the build instead of the page
 - **Expressive code blocks** — syntax highlighting, editor and terminal frames, line markers, and a copy button on every fenced block, themed by the site's light/dark toggle
@@ -69,7 +69,7 @@ All commands run from the root of the project:
 
 1. `src/data/config.json`: site config — brand name, description, copyright, social links, and navigation (labels are translation keys, paths are language-relative)
 
-2. `src/content/post`, `src/content/shortpost`: your writing (Markdown / MDX), one folder per language and slug
+2. `src/content/post`, `src/content/note`: your writing (Markdown / MDX), one folder per language and slug
 
 3. `src/i18n/ui.ts`: translations and locale metadata — English is the source of truth, and every other language must define the same keys
 
@@ -87,7 +87,7 @@ All commands run from the root of the project:
 
 ### Writing content
 
-Content lives in `src/content/{post|shortpost}/{lang}/{slug}/index.mdx`. The language is the first path segment and the slug is the rest of the path.
+Content lives in `src/content/{post|note}/{lang}/{slug}/index.mdx`. The language is the first path segment and the slug is the rest of the path.
 
 A post:
 
@@ -103,11 +103,11 @@ lastModifiedDate: 2023-09-02 # optional
 ---
 ```
 
-A shortpost:
+A note:
 
 ```mdx
 ---
-headline: "Demo Shortpost"
+headline: "Demo Note"
 publishDate: 2024-04-22
 category: "Non-Technical Discussion"
 ---
@@ -143,7 +143,7 @@ pnpm test:e2e   # browser tests, including the sub-path deployment suite
 ├── public/              # static assets (favicon, images)
 ├── src/
 │   ├── components/      # Astro components (navbar, footer, post items, …)
-│   ├── content/         # posts and shortposts, one folder per language
+│   ├── content/         # posts and notes, one folder per language
 │   ├── data/            # site config (config.json)
 │   ├── i18n/            # translations and locale helpers
 │   ├── layouts/         # shared page shell

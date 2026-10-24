@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 
-test("opening a shortpost positions its active entry in the viewport", async ({ page }) => {
-  await page.goto("/en/shortposts/");
+test("opening a note positions its active entry in the viewport", async ({ page }) => {
+  await page.goto("/en/notes/");
 
-  const lastLink = page.getByRole("main").locator('a[href*="/shortposts/"]').last();
+  const lastLink = page.getByRole("main").locator('a[href*="/notes/"]').last();
   const href = await lastLink.getAttribute("href");
-  expect(href).toMatch(/^\/en\/shortposts\/.+\/#shortpost-.+$/);
+  expect(href).toMatch(/^\/en\/notes\/.+\/#note-.+$/);
 
   await page.goto(href!);
 

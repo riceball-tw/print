@@ -2,7 +2,7 @@ import type { LanguageKey } from "@/i18n/ui";
 import { getSlugFromId } from "@/i18n/utils";
 import { normalizePath } from "@/utils/nav";
 import { categoriesByLang, postsByLang } from "@/utils/posts";
-import { shortpostCategoriesByLang, shortpostsByLang } from "@/utils/shortposts";
+import { noteCategoriesByLang, notesByLang } from "@/utils/notes";
 import { slugify } from "@/utils/slug";
 
 /**
@@ -12,9 +12,9 @@ import { slugify } from "@/utils/slug";
  */
 interface LanguageRoutes {
   postSlugs: Set<string>;
-  shortpostSlugs: Set<string>;
+  noteSlugs: Set<string>;
   postCategorySlugs: Set<string>;
-  shortpostCategorySlugs: Set<string>;
+  noteCategorySlugs: Set<string>;
 }
 
 const routesCache = new Map<LanguageKey, LanguageRoutes>();
@@ -31,9 +31,9 @@ const getLanguageRoutes = (lang: LanguageKey): LanguageRoutes => {
         .filter((post) => !post.data.isDraft)
         .map((post) => getSlugFromId(post.id)),
     ),
-    shortpostSlugs: new Set(shortpostsByLang(lang).map((shortpost) => getSlugFromId(shortpost.id))),
+    noteSlugs: new Set(notesByLang(lang).map((note) => getSlugFromId(note.id))),
     postCategorySlugs: new Set(categoriesByLang(lang).map(slugify)),
-    shortpostCategorySlugs: new Set(shortpostCategoriesByLang(lang).map(slugify)),
+    noteCategorySlugs: new Set(noteCategoriesByLang(lang).map(slugify)),
   };
 
   routesCache.set(lang, routes);
@@ -46,7 +46,7 @@ const segmentsOf = (path: string): string[] => normalizePath(path).split("/").fi
 /**
  * Whether the language-relative `path` has a page in `lang`.
  *
- * Posts and shortposts are translated per entry, so a page can exist in one
+ * Posts and notes are translated per entry, so a page can exist in one
  * language and not another. Unknown paths are assumed to exist: the picker
  * should only cross out a language when it is certain there is no page.
  */
@@ -63,12 +63,12 @@ export const hasTranslation = (path: string, lang: LanguageKey): boolean => {
     return false;
   }
 
-  if (section === "shortposts") {
+  if (section === "notes") {
     if (first === undefined) return true;
     if (first === "categories" && rest.length === 1) {
-      return routes.shortpostCategorySlugs.has(rest[0]);
+      return routes.noteCategorySlugs.has(rest[0]);
     }
-    if (first !== "categories") return routes.shortpostSlugs.has([first, ...rest].join("/"));
+    if (first !== "categories") return routes.noteSlugs.has([first, ...rest].join("/"));
     return false;
   }
 
