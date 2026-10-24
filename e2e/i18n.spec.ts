@@ -44,6 +44,8 @@ test("the language picker lists every language and marks the current one", async
   const picker = page.getByRole("navigation", { name: "請選擇語言" });
   await expect(picker).toBeVisible();
 
+  await picker.getByTestId("language-picker-trigger").click();
+
   for (const name of Object.values(languages)) {
     await expect(picker.getByText(name, { exact: true })).toBeVisible();
   }
@@ -62,19 +64,21 @@ test("the language picker lives in the sidebar", async ({ page }) => {
   }
 });
 
-test("the language picker stays compact in the top bar on a narrow screen", async ({ page }) => {
+test("the language picker stays compact in the top bar and reveals its menu on a narrow screen", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/zh-tw/");
 
   const picker = page.getByTestId("sidebar").getByRole("navigation", { name: "請選擇語言" });
   await expect(picker).toBeVisible();
 
-  // The full names do not fit beside the navigation, so the picker falls back
-  // to the compact labels.
-  for (const short of Object.values(languageShortNames)) {
-    await expect(picker.getByText(short, { exact: true })).toBeVisible();
-  }
+  // The toolbar only shows the selected compact label until the menu is opened.
+  await expect(picker.getByText(`[${languageShortNames["zh-tw"]}]`, { exact: true })).toBeVisible();
   await expect(picker.getByText("繁體中文", { exact: true })).toBeHidden();
+
+  await picker.getByTestId("language-picker-trigger").click();
+  for (const name of Object.values(languages)) {
+    await expect(picker.getByText(name, { exact: true })).toBeVisible();
+  }
 
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -82,10 +86,48 @@ test("the language picker stays compact in the top bar on a narrow screen", asyn
   expect(overflow).toBe(0);
 });
 
+test("the language menu stays inside the viewport", async ({ page }) => {
+  const viewports = [
+    { width: 1280, height: 640 },
+    { width: 320, height: 500 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/en/");
+
+    const picker = page.getByRole("navigation", { name: "Please select language" });
+    const trigger = picker.getByTestId("language-picker-trigger");
+    await trigger.click();
+
+    const menu = picker.getByRole("list");
+    await expect(menu).toBeVisible();
+    await expect(picker.locator("[aria-current='true']")).toBeFocused();
+
+    const menuBox = await menu.boundingBox();
+    const triggerBox = await trigger.boundingBox();
+    expect(menuBox).toBeTruthy();
+    expect(triggerBox).toBeTruthy();
+    expect(menuBox!.y).toBeGreaterThanOrEqual(-1);
+    expect(menuBox!.x).toBeGreaterThanOrEqual(-1);
+    expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(viewport.height + 1);
+    expect(menuBox!.x + menuBox!.width).toBeLessThanOrEqual(viewport.width + 1);
+
+    // The desktop picker sits at the bottom of the sidebar, so the menu has to open upward.
+    if (triggerBox!.y > viewport.height * 0.6) {
+      expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(triggerBox!.y + 1);
+    }
+
+    await page.keyboard.press("Escape");
+    await expect(menu).toBeHidden();
+  }
+});
+
 test("switching language keeps the visitor on the same page", async ({ page }) => {
   await page.goto("/en/posts/");
 
   const picker = page.getByRole("navigation", { name: "Please select language" });
+  await picker.getByTestId("language-picker-trigger").click();
   await picker.getByRole("link", { name: "繁體中文" }).click();
 
   await expect(page).toHaveURL(/\/zh-tw\/posts\/$/);

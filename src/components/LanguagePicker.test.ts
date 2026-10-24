@@ -34,6 +34,15 @@ describe("LanguagePicker", () => {
     expect(html).not.toContain('href="/en/posts"');
   });
 
+  it("keeps the collapsed control to the current language's compact label", async () => {
+    const html = await renderPicker({ lang: "en", path: "/", label: "Please select language" });
+
+    expect(html).toContain('popovertarget="language-picker-menu"');
+    expect(html).toContain(`>[${languageShortNames.en}]<`);
+    expect(html).not.toContain(`>[${languageShortNames["zh-cn"]}]<`);
+    expect(html).not.toContain(`>[${languageShortNames["zh-tw"]}]<`);
+  });
+
   it("strikes through languages that have no version of the page", async () => {
     // `mermaid-gallery` is only written in English, so the other languages
     // have no counterpart to link to.
@@ -68,13 +77,10 @@ describe("LanguagePicker", () => {
     expect(html).toContain('href="/en/"');
   });
 
-  it("renders a short label next to the full name for every language", async () => {
+  it("renders every full language name in the disclosed menu", async () => {
     const html = await renderPicker({ lang: "en", path: "/", label: "Please select language" });
 
-    for (const [key, short] of Object.entries(languageShortNames)) {
-      // Wrapped in its own element, so the compact label is not just a
-      // substring of the full name.
-      expect(html).toContain(`>${short}<`);
+    for (const [key] of Object.entries(languageShortNames)) {
       expect(html).toContain(languages[key as LanguageKey]);
     }
   });
