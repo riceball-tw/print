@@ -1,23 +1,25 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Test"]
+    branches: [main]
+    types: [completed]
   workflow_dispatch:
 
 # Read the repo; the deploy job additionally gets `pages: write` + `id-token: write`.
 permissions:
   contents: read
 
-# One Pages deployment at a time. Queued runs wait for the live one instead of
-# cancelling it mid-flight.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
   build:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -32,12 +34,6 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-
-      # Checks are deliberately run without `PUBLIC_BASE_URL`: the unit tests
-      # pin root-relative links and stub the base themselves. Only the build
-      # below needs the real deployment sub-path.
-      - run: pnpm typecheck
-      - run: pnpm test
 
       # Resolves the absolute deployment URL the sitemap integration needs:
       # a `PUBLIC_BASE_URL` variable that already is a full URL (custom domain)
