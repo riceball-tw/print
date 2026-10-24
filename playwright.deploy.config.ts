@@ -13,7 +13,7 @@ export default defineConfig({
   },
   webServer: {
     command: "pnpm build && pnpm preview --host 127.0.0.1 --port 4323 --ignore-lock",
-    url: "http://127.0.0.1:4323/print/",
+    url: "http://127.0.0.1:4323/",
     env: { PUBLIC_BASE_URL: "print" },
     reuseExistingServer: !process.env.CI,
   },
