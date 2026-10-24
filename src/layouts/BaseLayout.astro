@@ -5,17 +5,12 @@ import AppFooter from '@/components/AppFooter.astro';
 import AppNavbar from '@/components/AppNavbar.astro';
 import LanguagePicker from '@/components/LanguagePicker.astro';
 import AppLogo from '@/components/AppLogo.astro';
+import HeadSeo, { type Props as HeadSeoProps } from '@/components/HeadSeo.astro';
 import { languageTags } from '@/i18n/ui';
 import { getLangFromUrl, getPathFromUrl, useTranslatedPath, useTranslations } from '@/i18n/utils';
 import { buildNav } from '@/utils/nav';
-import { withBase } from '@/utils/base';
 
-interface Props {
-	title: string;
-	description?: string;
-}
-
-const { title, description = 'A minimal Astro site.' } = Astro.props;
+interface Props extends HeadSeoProps {}
 
 const lang = getLangFromUrl(Astro.url);
 const path = getPathFromUrl(Astro.url);
@@ -33,20 +28,15 @@ const homeUrl = translatePath('/');
 <!doctype html>
 <html lang={languageTags[lang]}>
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<link id="site-favicon" rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
-		<link rel="icon" href={withBase('/favicon.ico')} />
-		<link rel="sitemap" href={withBase('/sitemap-index.xml')} />
-		<title>{title}</title>
+		<HeadSeo {...Astro.props} />
 		<script is:inline>
 			try {
-				document.documentElement.dataset.theme =
-					localStorage.getItem("theme") === "dark" ? "dark" : "light";
+				const theme = localStorage.getItem("theme") === "dark" ? "dark" : "light";
+				document.documentElement.dataset.theme = theme;
+				document.documentElement.style.colorScheme = theme;
 			} catch {
 				document.documentElement.dataset.theme = "light";
+				document.documentElement.style.colorScheme = "light";
 			}
 		</script>
 		<slot name="head" />
@@ -98,6 +88,7 @@ const homeUrl = translatePath('/');
 
 			const applyTheme = (theme: 'light' | 'dark') => {
 				document.documentElement.dataset.theme = theme;
+				document.documentElement.style.colorScheme = theme;
 				toggle?.setAttribute('aria-pressed', String(theme === 'dark'));
 				if (toggle) {
 					toggle.textContent =

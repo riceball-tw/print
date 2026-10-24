@@ -17,7 +17,7 @@ test("home page renders through the base layout", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
     "content",
-    "width=device-width",
+    "width=device-width, initial-scale=1, viewport-fit=cover",
   );
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",

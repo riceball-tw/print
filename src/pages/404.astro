@@ -45,7 +45,7 @@ const copy = Object.fromEntries(
 );
 ---
 
-<BaseLayout title={`${brand.name} · 404`} description={t('notfound.body')}>
+<BaseLayout title={`${brand.name} · 404`} description={t('notfound.body')} noindex={true}>
 	<main class="px-4 pb-12 pt-6">
 		<div class="max-w-4xl">
 			<p class="label" data-404="kicker">{t('notfound.kicker')}</p>
